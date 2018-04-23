@@ -1,0 +1,21 @@
+#! /bin/bash
+cd "`dirname $@`"
+
+DIR="`pwd`"
+echo "DIR=$DIR"
+
+Dockerfile="`basename $@`"
+echo "Dockerfile=$Dockerfile"
+
+##arch="`basename $DIR`"
+##echo `dirname $Dockerfile`
+arch="$(echo "$Dockerfile" | cut -d'.' -f2)"
+echo "arch=$arch"
+
+##image="`dirname $DIR`"
+image="`basename $DIR`"
+echo "image=$image"
+
+echo "Building 'jekotia/${image}_${arch}' from '$DIR'"
+docker build -t jekotia/${image}_${arch} -f $Dockerfile `pwd`
+echo "Finished building 'jekotia/${image}_${arch}' from '$DIR'"
