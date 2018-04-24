@@ -1,0 +1,10 @@
+weechat:
+    image: jekotia/weechat:armv7hf
+    restart: always
+    stdin_open: true
+    tty: true
+    volumes:
+      - /saturn/data/weechat:/weechat
+    ports:
+      - "9001:9001"
+      - "8443:8443"
