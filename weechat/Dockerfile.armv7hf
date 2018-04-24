@@ -1,27 +1,37 @@
 FROM resin/armv7hf-debian-qemu
 
-ENV TERM=screen-256color \
-        LANG=C.UTF-8 \
-        UID=1000 \
-        GID=1000 \
-        USER=weechat \
-        GROUP=weechat \
-        HOME=/home/weechat \
-        DATA=/weechat
+ENV	TERM=screen-256color \
+	LANG=C.UTF-8 \
+	UID=1000 \
+	GID=1000 \
+	USER=weechat \
+	GROUP=weechat \
+	HOME=/home/weechat \
+	DATA=/weechat
 
-RUN [ "cross-build-start" ]
+RUN	[ "cross-build-start" ]
 
-RUN apt-get update && apt-get install -y weechat
+RUN 	apt-get update && apt-get install -y weechat
 
-ADD run.sh /
-RUN     chmod +x /run.sh \
-        && mkdir -p $DATA \
-        && mkdir -p $HOME \
-        && addgroup -g $GID -S $GROUP \
-        && adduser --uid $UID --disabled-password --home $HOME --shell /sbin/nologin $USER \
-	&& adduser weechat weechat
+ADD	run.sh /
+RUN	chmod +x /run.sh \
+	&& mkdir -p $DATA \
+	&& mkdir -p $HOME \
+	&& addgroup \
+		-gid $GID \
+		$GROUP \
+ 	&& adduser \
+		--home $HOME \
+		--shell /sbin/nologin \
+		--no-create-home \
+		--uid $UID \
+		--gecos '' \
+		--gid $GID \
+		--disabled-password \
+		$USER
+##	&& adduser weechat weechat
 
-RUN [ "cross-build-end" ]  
+RUN 	[ "cross-build-end" ]  
 
 VOLUME $DATA
 
