@@ -14,9 +14,7 @@ RUN	[ "cross-build-start" ]
 RUN 	apt-get update && apt-get install -y \
 	weechat \
 	weechat-curses \
-	weechat-plugins \
-	weechat-python \
-	weechat-perl
+	weechat-plugins
 
 ADD	run.sh /
 RUN	chmod +x /run.sh \
