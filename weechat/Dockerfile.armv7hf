@@ -11,7 +11,12 @@ ENV	TERM=screen-256color \
 
 RUN	[ "cross-build-start" ]
 
-RUN 	apt-get update && apt-get install -y weechat
+RUN 	apt-get update && apt-get install -y \
+	weechat \
+	weechat-curses \
+	weechat-plugins \
+	weechat-python \
+	weechat-perl
 
 ADD	run.sh /
 RUN	chmod +x /run.sh \
