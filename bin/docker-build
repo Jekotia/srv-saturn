@@ -1,10 +1,10 @@
 #! /bin/bash
-cd "`dirname $@`"
+cd "`dirname $1`"
 
 DIR="`pwd`"
 echo "DIR=$DIR"
 
-Dockerfile="`basename $@`"
+Dockerfile="`basename $1`"
 echo "Dockerfile=$Dockerfile"
 
 ##arch="`basename $DIR`"
@@ -17,5 +17,11 @@ image="`basename $DIR`"
 echo "image=$image"
 
 echo "Building 'jekotia/${image}_${arch}' from '$DIR'"
-docker build -t jekotia/${image}_${arch} -f $Dockerfile `pwd`
+if docker build -t jekotia/${image}_${arch} -f $Dockerfile `pwd` $2 ; then
+	status="0"
+else
+	status="1"
+fi
 echo "Finished building 'jekotia/${image}_${arch}' from '$DIR'"
+
+exit $status
