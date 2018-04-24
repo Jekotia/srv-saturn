@@ -18,7 +18,8 @@ RUN     chmod +x /run.sh \
         && mkdir -p $DATA \
         && mkdir -p $HOME \
         && addgroup -g $GID -S $GROUP \
-        && adduser -u $UID -D -S -h $HOME -s /sbin/nologin -G $GROUP $USER
+        && adduser --uid $UID --disabled-password --home $HOME --shell /sbin/nologin $USER \
+	&& adduser weechat weechat
 
 RUN [ "cross-build-end" ]  
 
