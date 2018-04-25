@@ -1,7 +1,6 @@
 docker run \
 -itd \
--v /saturn/data/weechat/:/weechat \
--p 9001:9001/tcp \
--p 8443:8443/tcp \
+-v /saturn/data/weechat:/data \
+-p 8443:8443 \
 --name weechat \
-jekotia/weechat:armv7hf
+jekotia/weechat:[tag]
