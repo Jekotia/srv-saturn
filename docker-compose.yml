@@ -1,10 +1,97 @@
-weechat:
-    image: jekotia/weechat:armv7hf
-    restart: always
-    stdin_open: true
-    tty: true
+version: '3'
+
+services:
+  portainer:
+    image: portainer/portainer
+    container_name: "portainer"
+    restart: unless-stopped
     volumes:
-      - /saturn/data/weechat:/weechat
+      - /saturn/data/portainer:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "9000:80"
+    networks:
+      - local
+
+  watchtower:
+    image: v2tec/watchtower
+    container_name: "portainer-watchtower"
+    command: --cleanup portainer-app portainer-watchtower portainer/templates
+    networks:
+      - local
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+#  discord-irc:
+#    container_name: "discord-irc"
+#    container
+#    image: jekotia/discord-irc:armv7hf
+#    restart: unless-stopped
+#    volumes:
+#      - /saturn/data/discord-irc:/data
+#    ports:
+#      - 
+#    networks:
+#      - local
+
+#  gogs:
+#    image:
+#    container_name: "gogs"
+#    restart: unless-stopped
+#    volumes:
+#      - /saturn/data/gogs:/data
+#    ports:
+#      - 
+#    networks:
+#      - local
+
+#  hass:
+#    image:
+#    container_name: "hass"
+#    restart: unless-stopped
+#    volumes:
+#     - /saturn/data/hass:/data
+#    ports:
+#      - 
+#    networks:
+#      - local
+
+#  pivpn:
+#    image:
+#    container_name: "pivpn"
+#    restart: unless-stopped
+#    volumes:
+#      - /saturn/data/pivpn:/data
+#    ports:
+#      - 
+#    networks:
+#      - local
+
+#  pihole:
+#    image:
+#    container_name: "pihole"
+#    restart: unless-stopped
+#    volumes:
+#      - /saturn/data/pihole:/data
+#    ports:
+#      - 
+#    networks:
+#      - local
+
+  weechat:
+    image: jekotia/weechat:armv7hf
+    container_name: "weechat"
+    restart: unless-stopped
+    volumes:
+      - /saturn/data/weechat:/data
     ports:
       - "9001:9001"
       - "8443:8443"
+    networks:
+      - local
+    stdin_open: true
+    tty: true
+
+networks:
+  local:
+    driver: bridge
