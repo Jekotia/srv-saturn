@@ -16,8 +16,15 @@ echo "arch=$arch"
 image="`basename $DIR`"
 echo "image=$image"
 
+if [[ "$arch" == "Dockerfile" ]] ; then
+	imageName=${image}
+else
+	imageName=${image}_${arch}
+fi
+echo "imageName=$imageName"
+
 echo "Building 'jekotia/${image}_${arch}' from '$DIR'"
-if docker build -t jekotia/${image}_${arch} -f $Dockerfile `pwd` $2 ; then
+if docker build -t jekotia/$imageName -f $Dockerfile `pwd` $2 ; then
 	status="0"
 else
 	status="1"
