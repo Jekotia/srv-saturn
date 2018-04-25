@@ -1,4 +1,4 @@
-FROM resin/amd64-alpine
+FROM resin/raspberrypi3-alpine:3.6
 
 ENV TERM=screen-256color \
 	LANG=C.UTF-8 \
