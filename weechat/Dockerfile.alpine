@@ -1,4 +1,5 @@
-FROM alpine
+#FROM alpine
+FROM jekotia/armv7hf-alpine-qemu
 
 ENV	TERM=screen-256color \
 	LANG=C.UTF-8 \
@@ -8,6 +9,8 @@ ENV	TERM=screen-256color \
 	GROUP=weechat \
 	HOME=/home/weechat \
 	DATA=/data
+
+RUN ["cross-build-start"]
 
 RUN BUILD_DEPS=" \
         cmake \
@@ -64,7 +67,7 @@ RUN	chmod +x /run.sh \
 		$USER
 ##	&& adduser weechat weechat
 
-#RUN 	[ "cross-build-end" ]  
+RUN 	[ "cross-build-end" ]
 
 VOLUME $DATA
 
