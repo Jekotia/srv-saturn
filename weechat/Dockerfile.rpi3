@@ -9,6 +9,8 @@ ENV TERM=screen-256color \
 	HOME=/home/weechat \
 	DATA=/data
 
+RUN [ "cross-build-start" ]
+
 RUN BUILD_DEPS=" \
 	cmake \
 	build-base \
@@ -61,6 +63,8 @@ RUN	chmod +x /run.sh \
 		-s /sbin/nologin \
 		-G $GROUP \
 		$USER
+
+RUN [ "cross-build-end" ]
 
 VOLUME $DATA
 
