@@ -1,0 +1,41 @@
+## FROM debian
+FROM alpine
+
+## apt
+RUN	apk add weechat --update
+##        && apt-get upgrade \
+
+ENV HOME=/home/weechat
+ENV DATA=/data/weechat
+ENV TERM=screen-256color
+ENV LANG=C.UTF-8
+ENV UID=1000
+ENV GID=1000
+
+ADD run.sh /
+
+## user
+RUN     mkdir -p $HOME \
+	&& addgroup weechat \
+	&& adduser -HD -h $HOME -s /bin/bash -G weechat weechat \
+	&& chown -R weechat:weechat $HOME
+
+## data
+RUN	mkdir -p $DATA \
+	&& ln -s $DATA $HOME/.weechat \
+	&& chown -R weechat:weechat $HOME/.weechat \
+	&& chown -R weechat:weechat $DATA
+
+RUN ls -la $HOME
+RUN ls -la $DATA
+## External
+USER weechat
+
+WORKDIR $HOME
+
+VOLUME $HOME/.weechat
+
+EXPOSE 9001/tcp
+EXPOSE 8443/tcp
+RUN ls -la /
+ENTRYPOINT ["/usr/bin/weechat", "-d /data/weechat"]
