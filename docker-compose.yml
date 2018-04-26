@@ -33,16 +33,17 @@ services:
 #    networks:
 #      - local
 
-#  gogs:
-#    image:
-#    container_name: "gogs"
-#    restart: unless-stopped
-#    volumes:
-#      - /saturn/data/gogs:/data
-#    ports:
-#      - 
-#    networks:
-#      - local
+  gogs:
+    image: gogs/gogs-rpi
+    container_name: "gogs"
+    restart: unless-stopped
+    volumes:
+      - /saturn/data/gogs:/data
+    ports:
+      - 10022:22
+      - 10080:3000
+    networks:
+      - local
 
 #  hass:
 #    image:
