@@ -12,18 +12,16 @@ ENV TERM=screen-256color \
 RUN [ "cross-build-start" ]
 
 RUN	apk -U upgrade
-#	&& apk add
 
 RUN	npm i -g npm \
 	&& npm install -g zlib-sync discordapp/erlpack uws \
 	&& npm install -g discord.js \
 	&& npm install -g discord-irc
 
-#ADD run.sh /
-#RUN	chmod +x /run.sh \
 RUN	mkdir -p $DATA \
 	&& mkdir -p $HOME \
 	&& chown -R $UID:$GID $HOME \
+	&& chown -R $UID:$GID $DATA \
 	&& addgroup \
 		-g $GID \
 		-S \
@@ -45,5 +43,4 @@ WORKDIR $HOME
 
 USER $USER
 
-ENTRYPOINT ["discord-irc, --config $DATA/discord-irc.json"]
-#ENTRYPOINT ["/run.sh"]
+CMD /usr/local/bin/discord-irc --config /data/discord-irc.json
