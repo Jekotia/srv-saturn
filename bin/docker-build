@@ -23,12 +23,12 @@ else
 fi
 echo "imageName=$imageName"
 
-echo "Building 'jekotia/${image}_${arch}' from '$DIR'"
+echo "Building 'jekotia/${imageName}' from '$DIR'"
 if docker build -t jekotia/$imageName -f $Dockerfile `pwd` $2 ; then
 	status="0"
 else
 	status="1"
 fi
-echo "Finished building 'jekotia/${image}_${arch}' from '$DIR'"
+echo "Finished building 'jekotia/${imageName}' from '$DIR'"
 
 exit $status
