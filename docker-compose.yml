@@ -22,16 +22,14 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
-#  discord-irc:
-#    image: jekotia/discord-irc:rpi3
-#    container_name: "discord-irc"
-#    restart: unless-stopped
-#    volumes:
-#      - /saturn/data/discord-irc:/data
-#    ports:
-#      - 
-#    networks:
-#      - local
+  discord-irc:
+    image: jekotia/discord-irc
+    container_name: "discord-irc"
+    restart: unless-stopped
+    volumes:
+      - /saturn/data/discord-irc:/data
+    networks:
+      - local
 
   gogs:
     image: gogs/gogs-rpi
@@ -52,7 +50,23 @@ services:
 #    volumes:
 #     - /saturn/data/hass:/data
 #    ports:
-#      - 
+#      -
+#    networks:
+#      - local
+
+#nginx
+#  nginx:
+#    image: jekotia/nginx
+#    container_name: "nginx"
+#    restart: unless-stopped
+#    volumes:
+#      - /saturn/data/nginx/conf:/etc/nginx:ro
+#      - /saturn/data/nginx/www:/var/www:ro
+#      - /saturn/data/nginx/logs:/var/log/nginx
+#      - /saturn/data/cert:/cert:ro
+#    ports:
+#      - 80:80
+#      - 443:443
 #    networks:
 #      - local
 
@@ -63,7 +77,7 @@ services:
 #    volumes:
 #      - /saturn/data/pivpn:/data
 #    ports:
-#      - 
+#      -
 #    networks:
 #      - local
 
@@ -74,12 +88,12 @@ services:
 #    volumes:
 #      - /saturn/data/pihole:/data
 #    ports:
-#      - 
+#      -
 #    networks:
 #      - local
 
   weechat:
-    image: jekotia/weechat:rpi3
+    image: jekotia/weechat
     container_name: "weechat"
     restart: unless-stopped
     volumes:
