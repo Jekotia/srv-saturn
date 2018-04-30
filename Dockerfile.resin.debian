@@ -1,0 +1,37 @@
+FROM resin/armv7hf-debian
+
+ENV TERM=screen-256color \
+	LANG=C.UTF-8 \
+	UID=1000 \
+	GID=1000 \
+	USER= \
+	GROUP= \
+	DATA=/data
+
+RUN [ "cross-build-start" ]
+
+RUN	apt-get update -y \
+	&& apt-get upgrade -y \
+	&& apt-get install \
+		git
+
+RUN     mkdir -p $DATA \
+        && addgroup \
+                --gid $GID \
+                --system \
+                $GROUP \
+        && adduser \
+                --uid $UID \
+                --disabled-password \
+                --system \
+                --home $HOME \
+                --shell /sbin/nologin \
+                --gid $GID \
+                $USER \
+        && mkdir -p $HOME \
+        && chown -R $USER:$GROUP $HOME
+
+RUN [ "cross-build-end" ]
+
+VOLUME $DATA
+
