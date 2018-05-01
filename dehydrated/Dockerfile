@@ -22,7 +22,7 @@ RUN	apk -U upgrade \
 
 #RUN	mkdir -p $DATA \
 #	&& mkdir -p $HOME \
-ADD	run.sh /
+COPY	run.sh /
 RUN	chmod +x /run.sh \
 	&& addgroup \
 		-g $GID \

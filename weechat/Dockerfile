@@ -48,7 +48,7 @@ RUN BUILD_DEPS=" \
 	&& rm -rf /var/cache/apk/* \
 	&& rm -rf /tmp/*
 
-ADD run.sh /
+COPY run.sh /
 RUN	chmod +x /run.sh \
 	&& mkdir -p $DATA \
 	&& mkdir -p $HOME \
