@@ -24,7 +24,7 @@ services:
 
   mysql:
     image: hypriot/rpi-mysql
-    container_name: "watchtower"
+    container_name: "mysql"
     restart: unless-stopped
     networks:
     - "local"
@@ -47,8 +47,8 @@ services:
     volumes:
     - /saturn/data/gogs:/data
     ports:
-    - "10022:22"
-    - "10080:3000"
+    - "1022:22"
+    - "3000:3000"
     networks:
     - "local"
     depends_on:
