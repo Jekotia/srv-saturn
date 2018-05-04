@@ -29,9 +29,9 @@ services:
     networks:
     - "local"
     volumes:
-    environment:
-    -  "MYSQL_ROOT_PASSWORD=testing1234"
     - "/docker/data/mysql:/var/lib/mysql"
+    environment:
+    - "MYSQL_ROOT_PASSWORD=testing1234"
 
   discord-irc:
     image: jekotia/discord-irc
