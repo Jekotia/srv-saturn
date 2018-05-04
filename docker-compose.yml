@@ -14,7 +14,7 @@ services:
     - "local"
 
   watchtower:
-    image: v2tec/watchtower
+    image: v2tec/watchtower:armhf-0.3
     container_name: "watchtower"
     command: --cleanup
     networks:
