@@ -16,6 +16,7 @@ services:
   watchtower:
     image: v2tec/watchtower:armhf-0.3
     container_name: "watchtower"
+    restart: unless-stopped
     command: --cleanup
     networks:
     - "local"
@@ -25,11 +26,27 @@ services:
   mysql:
     image: hypriot/rpi-mysql
     container_name: "mysql"
-    restart: unless-stopped
     networks:
     - "local"
     volumes:
     - "/docker/data/mysql:/var/lib/mysql"
+
+  alerthub:
+    image: jekotia/alerthub
+    container_name: "alerthub"
+    restart: unless-stopped
+    volumes:
+    - "/saturn/data/alerthub/config.js:/data/config.js:ro"
+    networks:
+    - "out"
+
+  dehydrated:
+    image: jekotia/dehydrated
+    container_name: "dehydrated"
+    volumes:
+    - "/saturn/data/dehydrated:/data"
+    stdin_open: true
+    tty: true
 
   discord-irc:
     image: jekotia/discord-irc
@@ -119,4 +136,6 @@ services:
 
 networks:
   local:
+    driver: bridge
+  out:
     driver: bridge
