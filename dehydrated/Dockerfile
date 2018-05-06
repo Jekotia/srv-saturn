@@ -22,8 +22,8 @@ RUN	apk -U upgrade \
 
 #RUN	mkdir -p $DATA \
 #	&& mkdir -p $HOME \
-COPY	run.sh /
-RUN	chmod +x /run.sh \
+COPY	copy/entrypoint.sh /
+RUN	chmod +x /entrypoint.sh \
 	&& addgroup \
 		-g $GID \
 		-S $GROUP \
@@ -45,7 +45,4 @@ RUN [ "cross-build-end" ]
 
 VOLUME $DATA
 
-CMD /run.sh
-
-#ENTRYPOINT ["/run.sh"]
-## CMD ["--dir /weechat"]
+ENTRYPOINT ["/extrypoint.sh"]
