@@ -1,4 +1,5 @@
-FROM resin/raspberrypi3-alpine-node
+#FROM resin/raspberrypi3-alpine-node
+FROM jekotia/resin-raspberrypi3-alpine-node
 
 ENV TERM=screen-256color \
 	LANG=C.UTF-8 \
@@ -11,15 +12,8 @@ ENV TERM=screen-256color \
 	APPDIR=/home/nodejs/alerthub \
 	CONFIG=/home/nodejs/alerthub/etc/config.js
 
-RUN [ "cross-build-start" ]
-
-RUN	apk -U upgrade \
-	&& apk add \
-		git \
-		su-exec \
-	&& npm i -g npm
-
-RUN	mkdir -p $HOME \
+RUN	cross-build-start \
+	&& mkdir -p $HOME \
 	&& mkdir -p $DATA \
 	&& chown -R $UID:$GID $HOME \
 	&& chown -R $UID:$GID $DATA \
@@ -36,12 +30,14 @@ RUN	mkdir -p $HOME \
 		-G $GROUP \
 		$USER
 
-RUN	su-exec $USER$GROUP git clone https://github.com/Ardakilic/alerthub.git $APPDIR \
+RUN	apk add \
+		git \
+		su-exec \
+	&& su-exec $USER$GROUP git clone https://github.com/Ardakilic/alerthub.git $APPDIR \
 	&& rm -f $CONFIG \
-	&& ln -s /data/config.js $CONFIG
-
-WORKDIR	$APPDIR
-RUN	su-exec $USER$GROUP npm install \
+	&& ln -s /data/config.js $CONFIG \
+	&& cd $APPDIR \
+	&& su-exec $USER$GROUP npm install \
 	&& su-exec $USER$GROUP npm run init \
 	&& chown -R $UID:$GID $HOME \
 	&& chown -R $UID:$GID $DATA
