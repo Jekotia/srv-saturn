@@ -45,4 +45,4 @@ RUN [ "cross-build-end" ]
 
 VOLUME $DATA
 
-ENTRYPOINT ["/extrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
