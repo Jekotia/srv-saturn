@@ -71,16 +71,18 @@ services:
     depends_on:
     - "mysql"
 
-#  hass:
-#    image:
-#    container_name: "hass"
-#    restart: unless-stopped
-#    volumes:
-#    - /saturn/data/hass:/data
-#    ports:
-#    -
-#    networks:
-#    - local
+  hass:
+    image: homeassistant/raspberrypi3-homeassistant:0.68.1
+    container_name: "hass"
+    restart: unless-stopped
+    volumes:
+    - /path/to/your/config:/config
+    - /etc/localtime:/etc/localtime:ro
+#/saturn/data/hass:/data
+    ports:
+    - 3580:80
+    networks:
+    - local
 
 #nginx
 #  nginx:
@@ -98,16 +100,17 @@ services:
 #    networks:
 #    - local
 
-#  pivpn:
-#    image:
-#    container_name: "pivpn"
-#    restart: unless-stopped
-#    volumes:
-#    - /saturn/data/pivpn:/data
-#    ports:
-#    -
-#    networks:
-#    - local
+  pivpn:
+    image: jekotia/pivpn
+    container_name: "pivpn"
+    restart: unless-stopped
+    volumes:
+    - /saturn/data/pivpn:/data
+    ports:
+    - "1194:1194"
+    networks:
+    - local
+    - out
 
 #  pihole:
 #    image:
