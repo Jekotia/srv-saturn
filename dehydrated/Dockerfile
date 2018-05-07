@@ -1,4 +1,5 @@
-FROM resin/raspberrypi3-alpine:3.6
+#FROM resin/raspberrypi3-alpine:3.6
+FROM jekotia/resin-raspberrypi3-alpine
 
 ENV TERM=screen-256color \
 	LANG=C.UTF-8 \
@@ -11,19 +12,15 @@ ENV TERM=screen-256color \
 	DATA=/data \
 	CONFIG=/data/config
 
-RUN [ "cross-build-start" ]
+COPY	copy/entrypoint.sh /
 
-RUN	apk -U upgrade \
+RUN	cross-build-start \
+	&& chmod +x /entrypoint.sh \
 	&& apk add \
 		git \
 		sudo \
 		openssl \
-		curl
-
-#RUN	mkdir -p $DATA \
-#	&& mkdir -p $HOME \
-COPY	copy/entrypoint.sh /
-RUN	chmod +x /entrypoint.sh \
+		curl \
 	&& addgroup \
 		-g $GID \
 		-S $GROUP \
@@ -34,15 +31,16 @@ RUN	chmod +x /entrypoint.sh \
 		-h $HOME \
 		-s /sbin/nologin \
 		-G $GROUP \
-		$USER
-
-RUN	git clone https://github.com/lukas2511/dehydrated.git $APP \
+		$USER \
+	&& git clone https://github.com/lukas2511/dehydrated.git $APP \
 	&& git clone https://github.com/owhen/dns-01-manual.git $HOOK \
 	&& chown -R $USER:$GROUP $APP \
-	&& chmod +x $HOOK/hook.sh
+	&& chmod +x $HOOK/hook.sh \
+	&& cross-build-end
 
-RUN [ "cross-build-end" ]
+#RUN	mkdir -p $DATA \
+#	&& mkdir -p $HOME \
 
 VOLUME $DATA
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT [ "/entrypoint.sh" ]

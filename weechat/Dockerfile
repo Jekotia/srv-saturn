@@ -1,4 +1,5 @@
-FROM resin/raspberrypi3-alpine:3.6
+#FROM resin/raspberrypi3-alpine:3.6
+FROM jekotia/resin-raspberrypi3-alpine
 
 ENV TERM=screen-256color \
 	LANG=C.UTF-8 \
@@ -9,9 +10,10 @@ ENV TERM=screen-256color \
 	HOME=/home/weechat \
 	DATA=/data
 
-RUN [ "cross-build-start" ]
+COPY copy/entrypoint.sh /
 
-RUN BUILD_DEPS=" \
+RUN	cross-build-start \
+	BUILD_DEPS=" \
 	cmake \
 	build-base \
 	libcurl \
@@ -26,13 +28,12 @@ RUN BUILD_DEPS=" \
 	ca-certificates \
 	jq \
 	tar" \
-	&& apk -U upgrade && apk add \
+	&& apk add \
 	${BUILD_DEPS} \
 	gnutls \
 	ncurses \
 	libgcrypt \
 	python \
-	su-exec \
 	perl \
 	curl \
 	shadow \
@@ -47,10 +48,8 @@ RUN BUILD_DEPS=" \
 	&& make && make install \
 	&& apk del ${BUILD_DEPS} \
 	&& rm -rf /var/cache/apk/* \
-	&& rm -rf /tmp/*
-
-COPY run.sh /
-RUN	chmod +x /run.sh \
+	&& rm -rf /tmp/* \
+	&& chmod +x entrypoint.sh \
 	&& mkdir -p $DATA \
 	&& mkdir -p $HOME \
 	&& addgroup \
@@ -63,9 +62,8 @@ RUN	chmod +x /run.sh \
 		-h $HOME \
 		-s /sbin/nologin \
 		-G $GROUP \
-		$USER
-
-RUN [ "cross-build-end" ]
+		$USER \
+	&& cross-build-end
 
 VOLUME $DATA
 
@@ -73,5 +71,5 @@ WORKDIR $HOME
 
 EXPOSE 8443
 
-ENTRYPOINT ["/run.sh"]
+ENTRYPOINT ["entrypoint.sh"]
 ## CMD ["--dir /weechat"]
