@@ -112,16 +112,18 @@ services:
     - local
     - out
 
-#  pihole:
-#    image:
-#    container_name: "pihole"
-#    restart: unless-stopped
-#    volumes:
-#    - /saturn/data/pihole:/data
-#    ports:
-#    -
-#    networks:
-#    - local
+  pihole:
+    image: diginc/pi-hole-multiarch:debian_armhf
+    container_name: "pihole"
+    restart: unless-stopped
+    volumes:
+    - "/saturn/data/pihole/etc:/etc/pihole"
+    - "/saturn/data/pihole/dnsmasq.d:/etc/dnsmasq.d"
+    ports:
+    - "80:80"
+    - "53:53"
+    networks:
+    - local
 
   weechat:
     image: jekotia/weechat
