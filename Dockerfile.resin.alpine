@@ -1,4 +1,4 @@
-FROM resin/raspberrypi3-alpine:3.6
+FROM jekotia/resin-raspberrypi3-alpine
 
 ENV TERM=screen-256color \
 	LANG=C.UTF-8 \
@@ -8,15 +8,12 @@ ENV TERM=screen-256color \
 	GROUP= \
 	DATA=/data
 
-RUN [ "cross-build-start" ]
+COPY	copy/entrypoint.sh
 
-RUN	apk -U upgrade \
-	&& apk add \
-
-#RUN	mkdir -p $DATA \
-#	&& mkdir -p $HOME \
-ADD	run.sh /
-RUN	chmod +x /run.sh \
+RUN	cross-build-start \
+	&& chmod +x /entrypoint.sh \
+	&& mkdir -p $DATA \
+	&& mkdir -p $HOME \
 	&& addgroup \
 		-g $GID \
 		-S $GROUP \
@@ -27,13 +24,9 @@ RUN	chmod +x /run.sh \
 		-h $HOME \
 		-s /sbin/nologin \
 		-G $GROUP \
-		$USER
-
-RUN [ "cross-build-end" ]
+		$USER \
+	&& cross-build-end
 
 VOLUME $DATA
 
-CMD /run.sh
-
-#ENTRYPOINT ["/run.sh"]
-## CMD ["--dir /weechat"]
+ENTRYPOINT [ "/entrypoint.sh" ]
