@@ -40,14 +40,6 @@ services:
     networks:
     - "out"
 
-  dehydrated:
-    image: jekotia/dehydrated
-    container_name: "dehydrated"
-    volumes:
-    - "/saturn/data/dehydrated:/data"
-    stdin_open: true
-    tty: true
-
   discord-irc:
     image: jekotia/discord-irc
     container_name: "discord-irc"
