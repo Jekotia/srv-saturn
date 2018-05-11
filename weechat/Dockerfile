@@ -52,7 +52,7 @@ RUN	BUILD_DEPS=" \
 	&& apk del ${BUILD_DEPS} \
 	&& rm -rf /var/cache/apk/* \
 	&& rm -rf /tmp/* \
-	&& chmod +x entrypoint.sh \
+	&& chmod +x /entrypoint.sh \
 	&& mkdir -p $DATA \
 	&& mkdir -p $HOME \
 	&& addgroup \
@@ -78,5 +78,5 @@ WORKDIR $HOME
 
 EXPOSE 8443
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 ## CMD ["--dir /weechat"]
