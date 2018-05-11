@@ -12,7 +12,7 @@ RUN	apk -U upgrade \
 	&& cp /usr/share/zoneinfo/America/Toronto /etc/localtime \
 	&& echo "America/Toronto" >  /etc/timezone \
 	&& date \
-	&& apk del tzdata \
+	&& apk del tzdata
 
 RUN	[ "cross-build-end" ]
 ###
