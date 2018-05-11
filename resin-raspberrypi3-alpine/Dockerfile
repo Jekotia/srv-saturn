@@ -1,7 +1,11 @@
 FROM resin/raspberrypi3-alpine
 
-RUN	cross-build-start \
-	&& apk -U upgrade \
+#
+##
+###
+RUN	[ "cross-build-start" ]
+
+RUN	apk -U upgrade \
 	&& apk add \
 		tzdata \
 		su-exec \
@@ -9,4 +13,8 @@ RUN	cross-build-start \
 	&& echo "America/Toronto" >  /etc/timezone \
 	&& date \
 	&& apk del tzdata \
-	&& cross-build-end
+
+RUN	[ "cross-build-end" ]
+###
+##
+#

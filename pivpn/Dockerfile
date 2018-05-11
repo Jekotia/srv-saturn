@@ -1,6 +1,6 @@
-FROM resin/armv7hf-debian
+FROM	jekotia/resin-armv7hf-debian
 
-ENV TERM=screen-256color \
+ENV	TERM=screen-256color \
 	LANG=C.UTF-8 \
 	UID=1000 \
 	GID=1000 \
@@ -9,7 +9,10 @@ ENV TERM=screen-256color \
 	HOME=/home/pivpn \
 	DATA=/data
 
-RUN [ "cross-build-start" ]
+#
+##
+###
+RUN	[ "cross-build-start" ]
 
 RUN	apt-get update \
 	&& apt-get upgrade \
@@ -41,7 +44,7 @@ RUN	mkdir -p $DATA \
 	&& mkdir -p $HOME \
 	&& chown -R $USER:$GROUP $HOME
 
-COPY copy/setupVars.conf /etc/pivpn/setupVars.conf
+COPY	copy/setupVars.conf /etc/pivpn/setupVars.conf
 #RUN	mkdir -p /etc/pivpn && touch /etc/pivpn/setupVars.conf
 RUN	curl -L https://install.pivpn.io -o /install.sh \
 	&& bash /install.sh --unattended
@@ -49,6 +52,9 @@ RUN	curl -L https://install.pivpn.io -o /install.sh \
  #--unattended
 
 RUN [ "cross-build-end" ]
+###
+##
+#
 
 VOLUME $DATA
 

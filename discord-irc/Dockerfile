@@ -1,6 +1,6 @@
-#FROM resin/raspberrypi3-alpine-node
-FROM jekotia/resin-raspberrypi3-alpine-node
-ENV TERM=screen-256color \
+FROM	jekotia/resin-raspberrypi3-alpine-node
+
+ENV	TERM=screen-256color \
 	LANG=C.UTF-8 \
 	UID=1000 \
 	GID=1000 \
@@ -8,9 +8,12 @@ ENV TERM=screen-256color \
 	GROUP=nodejs \
 	HOME=/home/nodejs \
 	DATA=/data
+#
+##
+###
+RUN	[ "cross-build-start" ]
 
-RUN	cross-build-start \
-	&& npm install -g zlib-sync discordapp/erlpack uws \
+RUN	npm install -g zlib-sync discordapp/erlpack uws \
 	&& npm install -g discord.js \
 	&& npm install -g discord-irc
 
@@ -32,6 +35,9 @@ RUN	mkdir -p $DATA \
 		$USER
 
 RUN [ "cross-build-end" ]
+###
+##
+#
 
 VOLUME $DATA
 

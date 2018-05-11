@@ -1,7 +1,6 @@
-#FROM resin/raspberrypi3-alpine-node
-FROM jekotia/resin-raspberrypi3-alpine-node
+FROM	jekotia/resin-raspberrypi3-alpine-node
 
-ENV TERM=screen-256color \
+ENV	TERM=screen-256color \
 	LANG=C.UTF-8 \
 	UID=1000 \
 	GID=1000 \
@@ -11,9 +10,11 @@ ENV TERM=screen-256color \
 	HOME=/home/nodejs \
 	APPDIR=/home/nodejs/alerthub \
 	CONFIG=/home/nodejs/alerthub/etc/config.js
-
-RUN	cross-build-start \
-	&& mkdir -p $HOME \
+#
+##
+###
+RUN	[ "cross-build-start" ]
+RUN	mkdir -p $HOME \
 	&& mkdir -p $DATA \
 	&& chown -R $UID:$GID $HOME \
 	&& chown -R $UID:$GID $DATA \
@@ -43,6 +44,9 @@ RUN	apk add \
 	&& chown -R $UID:$GID $DATA
 
 RUN [ "cross-build-end" ]
+###
+##
+#
 
 VOLUME $DATA/config.js
 

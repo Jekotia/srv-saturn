@@ -1,6 +1,6 @@
-FROM jekotia/resin-raspberrypi3-alpine
+FROM	jekotia/resin-raspberrypi3-alpine
 
-ENV TERM=screen-256color \
+ENV	TERM=screen-256color \
 	LANG=C.UTF-8 \
 	UID=1000 \
 	GID=1000 \
@@ -8,10 +8,14 @@ ENV TERM=screen-256color \
 	GROUP= \
 	DATA=/data
 
-COPY	copy/entrypoint.sh
+COPY	copy/entrypoint.sh /
 
-RUN	cross-build-start \
-	&& chmod +x /entrypoint.sh \
+#
+##
+###
+RUN	[ "cross-build-start" ]
+
+RUN	chmod +x /entrypoint.sh \
 	&& mkdir -p $DATA \
 	&& mkdir -p $HOME \
 	&& addgroup \
@@ -24,8 +28,12 @@ RUN	cross-build-start \
 		-h $HOME \
 		-s /sbin/nologin \
 		-G $GROUP \
-		$USER \
-	&& cross-build-end
+		$USER
+
+RUN	[ "cross-build-end" ]
+###
+##
+#
 
 VOLUME $DATA
 

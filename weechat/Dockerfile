@@ -1,7 +1,6 @@
-#FROM resin/raspberrypi3-alpine:3.6
-FROM jekotia/resin-raspberrypi3-alpine
+FROM	jekotia/resin-raspberrypi3-alpine
 
-ENV TERM=screen-256color \
+ENV	TERM=screen-256color \
 	LANG=C.UTF-8 \
 	UID=1000 \
 	GID=1000 \
@@ -10,10 +9,14 @@ ENV TERM=screen-256color \
 	HOME=/home/weechat \
 	DATA=/data
 
-COPY copy/entrypoint.sh /
+COPY	copy/entrypoint.sh /
 
-RUN	cross-build-start \
-	BUILD_DEPS=" \
+#
+##
+###
+RUN	[ "cross-build-start" ]
+
+RUN	BUILD_DEPS=" \
 	cmake \
 	build-base \
 	libcurl \
@@ -62,8 +65,12 @@ RUN	cross-build-start \
 		-h $HOME \
 		-s /sbin/nologin \
 		-G $GROUP \
-		$USER \
-	&& cross-build-end
+		$USER
+
+RUN	[ "cross-build-end" ]
+###
+##
+#
 
 VOLUME $DATA
 
