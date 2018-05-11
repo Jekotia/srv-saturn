@@ -1,4 +1,4 @@
-FROM	jekotia/resin-armv7hf-debian
+FROM	jekotia/resin-raspberrypi3-debian
 
 ENV	TERM=screen-256color \
 	LANG=C.UTF-8 \

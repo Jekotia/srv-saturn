@@ -1,4 +1,4 @@
-FROM resin/armv7hf-debian
+FROM resin/raspberrypi3-debian
 
 #
 ##
