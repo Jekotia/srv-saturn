@@ -1,34 +1,62 @@
 #! /bin/bash
-cd "`dirname $1`"
+VER_NUM="1.0"
+VER_DATE="May 10th, 2018"
 
-DIR="`pwd`"
-echo "DIR=$DIR"
+imagePrefix="jekotia"
 
-Dockerfile="`basename $1`"
-echo "Dockerfile=$Dockerfile"
+function _usage () {
+	echo "This is a simple script for consistently building Docker images with the command:"
+	echo "	docker build -t TAG DIRECTORY"
+	echo "Authored by Josh 'Jekotia' Ameli, v${VER_NUM} ${VER_DATE}"
+	echo
+	echo "First argument MUST be a path to a directory".
+	echo "Any subsequent arguments are appended to the \`docker build\` command."
+	echo "e.g. \`docker-build ../php\` would run the native Docker command \`docker build -t ${imagePrefix}/php ../php\`"
+}
 
-##arch="`basename $DIR`"
-##echo `dirname $Dockerfile`
-arch="$(echo "$Dockerfile" | cut -d'.' -f2)"
-echo "arch=$arch"
+function _build () {
+	echo
+	echo "Building '${imageTag}' from '$DIR'"
+	if docker build -t $imageTag $DIR $@ ; then
+		buildStatus="$?"
+		echo
+		echo "Finished building '${imageTag}' from '$DIR'"
+	else
+		buildStatus="$?"
+		echo
+	fi
 
-##image="`dirname $DIR`"
-image="`basename $DIR`"
-echo "image=$image"
+	exit $buildStatus
+}
 
-if [[ "$arch" == "Dockerfile" ]] ; then
-	imageName=${image}
+if [[ "$1" == "" ]] ; then
+	_usage
+	exit 1
+
+elif [[ "$1" == "--help" || "$1" == "-h" ]] ; then
+	_usage
+
+elif	cd "$1" > /dev/null 2>&1 ; then # See if we can change to the target Dockerfile directory
+	shift
+
+	# Save the full path of our new location to a variable. We'll need to manipulate this string a little
+	# This allows us to maintain full functionality even when someone runs `docker-build ./`
+	DIR="`pwd`"
+	# Derive the image name from the directory the Dockerfile resides within
+	imageName="`basename $DIR`"
+	# Prepend the image name with '${imagePrefix}/' to get the tag
+	imageTag="${imagePrefix}/$imageName"
+
+	echo "===================== Build parameters ====================="
+	echo "| DIR       =  $DIR"
+	echo "| imageName =  $imageName"
+	echo "| imageTag  =  $imageTag"
+	echo "============================================================"
+
+	_build $@
 else
-	imageName=${image}_${arch}
+	echo "Oops! Looks like you specified a directory that doesn't exist."
+	exit 5
 fi
-echo "imageName=$imageName"
 
-echo "Building 'jekotia/${imageName}' from '$DIR'"
-if docker build -t jekotia/$imageName -f $Dockerfile `pwd` $2 ; then
-	status="0"
-else
-	status="1"
-fi
-echo "Finished building 'jekotia/${imageName}' from '$DIR'"
-
-exit $status
+exit 0
