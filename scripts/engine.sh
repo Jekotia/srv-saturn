@@ -16,7 +16,7 @@ function detect_arch () {
 }
 
 function detect_dist () {
-	dist=`cat /etc/os-release | grep "ID" | grep -v "VERSION_ID" | cut -d'=' -f2 | tr -d '[:space:]'`
+	dist=`cat /etc/os-release | grep "ID=" | grep -v "VERSION_ID" | cut -d'=' -f2 | tr -d '[:space:]'`
 }
 
 function detect_sys () {
