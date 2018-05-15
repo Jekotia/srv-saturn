@@ -1,19 +1,19 @@
 #! /bin/bash
-saturnBy="by-partuuid"
-saturnBytarget=6efcdd95-02
-saturnMnt=/mnt/saturn
-saturnDir=/saturn
-saturnPath=${saturnMnt}${saturnDir}
+
+source $SRV_SCRIPT_INIT
+
 puppetDebURL="https://apt.puppetlabs.com/puppet5-release-stretch.deb"
 
-function _isRoot () {
-	if [[ `id -u` == "0" ]] ; then
-		return
-	else
-		echo "This script requires root/sudo!"
-		exit 99
+function _snippets () {
+	if [ ! -e $sslRoot/dehydrated ] ; then
+		git submodule add https://github.com/lukas2511/dehydrated.git $sslRoot/dehydrated
+	fi
+	if [ ! -e $sslRoot/dns-01-manual ] ; then
+		git submodule add https://github.com/owhen/dns-01-manual.git $sslRoot/dns-01-manual
+		chmod +x ${SRV_ROOT}/ssl/dns-01-manual/hook.sh
 	fi
 }
+
 
 function _general () {
 	apt-get update && apt-get upgrade -y && apt-get dis-upgrade -y || exit 1
@@ -22,14 +22,14 @@ function _general () {
 }
 
 function _mounts () {
-	mkdir -p ${saturnMnt} || exit 10
+	mkdir -p ${SRV_DISK_MNT} || exit 10
 
-#	echo "PARTUUID=${saturnBytarget}  ${saturnMnt}     ext4    defaults,noatime  0       1" >> /etc/fstab || exit 11
-	mount /dev/disk/${saturnBy}/${saturnBytarget} ${saturnMnt} || exit 12
+#	echo "PARTUUID=${SRV_DISK_DEVtarget}  ${SRV_DISK_MNT}     ext4    defaults,noatime  0       1" >> /etc/fstab || exit 11
+	mount /dev/disk/${SRV_DISK_DEV}/${SRV_DISK_ID} ${SRV_DISK_MNT} || exit 12
 }
 
 function _puppet() {
-	wget -O /tmp/puppet.deb  ${puppetDebURL} || exit 20
+	wget -O /tmp/puppet.deb ${puppetDebURL} || exit 20
 	dpkg -i /tmp/puppet.deb || exit 21
 	rm -f /tmp/puppet.deb || exit 22
 	apt-get update || exit 23
@@ -37,35 +37,37 @@ function _puppet() {
 }
 
 function _docker () {
-	${saturnPath}/docker/scripts/engine.sh || exit 30
-	${saturnPath}/docker/scripts/compose.sh || exit 31
+	${SRV_ROOT}/docker/scripts/engine.sh || exit 30
+	${SRV_ROOT}/docker/scripts/compose.sh || exit 31
 }
 
-function _env () {
-	git clone ${saturnPath}/data/gogs/git/jekotia/.zsh.git /tmp/zsh || exit 50
-	sed -i.bak 's/zshSource=.*/zshSource="\/saturn\/data\/gogs\/git\/jekotia\/.zsh.git"/g' /tmp/zsh/shell-setup.sh || exit 51
-	bash /tmp/zsh/shell-setup.sh "pi" || exit 52
+function _pi () {
 	rm -rf /tmp/zsh || exit 53
+	git clone ${SRV_ROOT}/data/gogs/git/jekotia/.zsh.git /tmp/zsh || exit 50
+#	sed -i.bak 's/zshSource=.*/zshSource="\/saturn\/data\/gogs\/git\/jekotia\/.zsh.git"/g' /tmp/zsh/shell-setup.sh || exit 51
+	awk '{gsub(/zshSource=.*/,"zshSource=/saturn/data/gogs/git/jekotia/.zsh.git",column_number)}' /tmp/zsh/shell-setup.sh || exit 51
+#	bash /tmp/zsh/shell-setup.sh "pi" || exit 52
 }
 
 function _configure () {
-	puppet apply ${saturnPath}/puppet/computer.pp
-	puppet apply ${saturnPath}/puppet/cron.pp
-	puppet apply ${saturnPath}/puppet/symlinks.pp
-	puppet apply ${saturnPath}/puppet/mounts.pp
-	puppet apply ${saturnPath}/puppet/packages.pp
-	puppet apply ${saturnPath}/puppet/users-groups.pp
+	puppet apply ${SRV_ROOT}/puppet/computer.pp
+	puppet apply ${SRV_ROOT}/puppet/users-groups.pp
+	puppet apply ${SRV_ROOT}/puppet/files.pp
+	puppet apply ${SRV_ROOT}/puppet/cron.pp
+	puppet apply ${SRV_ROOT}/puppet/symlinks.pp
+	puppet apply ${SRV_ROOT}/puppet/mounts.pp
+	puppet apply ${SRV_ROOT}/puppet/packages.pp
 }
 
 _isRoot "exit"
-
+_pi
 #_general
 
 #_mounts
 
-_env
+#_pi
 
-_puppet
+#_puppet
 
 #_docker
 
