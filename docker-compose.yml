@@ -22,6 +22,21 @@ services:
     - "local"
     volumes:
     - "/var/run/docker.sock:/var/run/docker.sock"
+    environment:
+#The e-mail address from which notifications will be sent.
+    - WATCHTOWER_NOTIFICATION_EMAIL_FROM=${EMAIL_FROM}
+#The e-mail address to which notifications will be sent.
+    - WATCHTOWER_NOTIFICATION_EMAIL_TO=${EMAIL_TO}
+# The SMTP server to send e-mails through.
+    - WATCHTOWER_NOTIFICATION_EMAIL_SERVER=smtp.gmail.com
+# Do not verify the TLS certificate of the mail server. This should be used only for testing.
+    - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_TLS_SKIP_VERIFY=false
+# The port used to connect to the SMTP server to send e-mails through. Defaults to 25.
+    - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PORT=587
+# The username to authenticate with the SMTP server with.
+    - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_USER=${EMAIL_FROM}
+# The password to authenticate with the SMTP server with.
+    - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD=${EMAIL_FROM_PASSWORD}
 
   mysql:
     image: hypriot/rpi-mysql
@@ -30,15 +45,20 @@ services:
     - "local"
     volumes:
     - "/docker/data/mysql:/var/lib/mysql"
+    environment:
+    - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    - MYSQL_ROOT_PASSWORD=${DB_USER}
+    - MYSQL_USER_PASSWORD=${DB_PASSWORD}
+    - MYSQL_USER_PASSWORD=${DB_DATABASE}
 
-  alerthub:
-    image: jekotia/alerthub
-    container_name: "alerthub"
-    restart: unless-stopped
-    volumes:
-    - "/saturn/data/alerthub/config.js:/data/config.js:ro"
-    networks:
-    - "out"
+#  alerthub:
+#    image: jekotia/alerthub
+#    container_name: "alerthub"
+#    restart: unless-stopped
+#    volumes:
+#    - "/saturn/data/alerthub/config.js:/data/config.js:ro"
+#    networks:
+#    - "out"
 
   discord-irc:
     image: jekotia/discord-irc
@@ -56,28 +76,27 @@ services:
     volumes:
     - /saturn/data/gogs:/data
     ports:
-    - "1022:22"
+    - "10022:22"
     - "3000:3000"
     networks:
     - "local"
     depends_on:
     - "mysql"
 
-  hass:
-    image: homeassistant/raspberrypi3-homeassistant:0.68.1
-    container_name: "hass"
-    restart: unless-stopped
-    volumes:
-    - /path/to/your/config:/config
-    - /etc/localtime:/etc/localtime:ro
+#  hass:
+#    image: homeassistant/raspberrypi3-homeassistant:0.68.1
+#    container_name: "hass"
+#    restart: unless-stopped
+#    volumes:
+#    - /path/to/your/config:/config
+#    - /etc/localtime:/etc/localtime:ro
 #/saturn/data/hass:/data
-    ports:
-    - 3580:80
-    networks:
-    - local
+#    ports:
+#    - 3580:80
+#    networks:
+#    - local
 
-#nginx
-#  nginx:
+#  nginx-proxy:
 #    image: jekotia/nginx
 #    container_name: "nginx"
 #    restart: unless-stopped
@@ -92,30 +111,58 @@ services:
 #    networks:
 #    - local
 
-  pivpn:
-    image: jekotia/pivpn
-    container_name: "pivpn"
-    restart: unless-stopped
-    volumes:
-    - /saturn/data/pivpn:/data
-    ports:
-    - "1194:1194"
-    networks:
-    - local
-    - out
+#  pivpn:
+#    image: jekotia/pivpn
+#    container_name: "pivpn"
+#    restart: unless-stopped
+#    volumes:
+#    - /saturn/data/pivpn:/data
+#    ports:
+#    - "1194:1194"
+#    networks:
+#    - local
+#    - out
 
-  pihole:
-    image: diginc/pi-hole-multiarch:debian_armhf
-    container_name: "pihole"
-    restart: unless-stopped
-    volumes:
-    - "/saturn/data/pihole/etc:/etc/pihole"
-    - "/saturn/data/pihole/dnsmasq.d:/etc/dnsmasq.d"
-    ports:
-    - "80:80"
-    - "53:53"
-    networks:
-    - local
+#  pihole:
+#    image: diginc/pi-hole-multiarch:debian_armhf
+#    container_name: "pihole"
+#    restart: unless-stopped
+#    volumes:
+#    - "/saturn/data/pihole/etc:/etc/pihole"
+#    - "/saturn/data/pihole/dnsmasq.d:/etc/dnsmasq.d"
+#    ports:
+#    - "80:80"
+#    - "53:53"
+#    networks:
+#    - local
+#    environment:
+# Set to your server's external IP to block ads fully
+#    - ServerIP=
+# If you have a v6 network set to your server's external IPv6 to block IPv6 ads fully
+#    - ServerIPv6=
+# Set your timezone to make sure logs rotate at local midnight instead of at UTC midnight.
+# See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+#    - TZ=CA
+# http://pi.hole/admin password. Run `docker logs pihole | grep random` to find your random pass.
+#    - WEBPASSWORD=${PIHOLE_WEB_PASSWORD}
+# Primary upstream DNS provider, default is google DNS
+#    - DNS1=8.8.8.8
+# Secondary upstream DNS provider, default is google DNS
+#    - DNS2=8.8.4.4
+# What your web server 'virtual host' is, accessing admin through this Hostname/IP allows you to make
+# changes to the whitelist / blacklists in addition to the default 'http://pi.hole/admin/' address
+#    - VIRTUAL_HOST=
+# For unraid compatibility, strips out all the IPv6 configuration from DNS/Web services when false
+#    - IPv6=False
+# The default works fine with our basic example docker run commands.
+# If you're trying to use DHCP with --net host mode then you may have to customize this or DNSMASQ_LISTENING.
+#    - INTERFACE=
+# local listens on all local subnets
+# all permits listening on internet origin subnets in addition to local.
+#    - DNSMASQ_LISTENING=
+# This will break the 'webpage blocked' functionality of pi-hole however it may help advanced setups
+# like those running synology or --net=host docker argument.
+#    - WEB_PORT=
 
   weechat:
     image: jekotia/weechat
@@ -136,3 +183,5 @@ networks:
     driver: bridge
   out:
     driver: bridge
+#  proxy
+#    driver: bridge
