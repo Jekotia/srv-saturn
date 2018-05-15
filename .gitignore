@@ -1,5 +1,6 @@
-scripts/conf
+conf
 .env
 test/
 ref/
 queue/
+*.log
