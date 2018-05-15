@@ -1,11 +1,11 @@
 #! /bin/bash
+user=pi
 if [[ ! `id -u` == "0" ]] ; then
 	echo "This script requires root/sudo!"
 	exit 99
 fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source $DIR/conf
 
 arch=""
 dist=""
@@ -61,7 +61,7 @@ function setup_rpi3 () {
 }
 
 function setup_common () {
-	usermod -aG docker $user
+	#usermod -aG docker $user
 
 	docker run hello-world
 
