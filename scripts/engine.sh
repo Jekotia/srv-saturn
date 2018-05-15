@@ -1,11 +1,9 @@
 #! /bin/bash
-user=pi
-if [[ ! `id -u` == "0" ]] ; then
-	echo "This script requires root/sudo!"
-	exit 99
-fi
+source $SRV_SCRIPT_INIT
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+#user=pi
+
+_isRoot "exit"
 
 arch=""
 dist=""
@@ -68,7 +66,7 @@ function setup_common () {
 	cat >> /home/$user/.profile <<EOF
 
 if [ -d "/saturn/docker/bin" ] ; then
-    PATH="/saturn/docker/bin:$PATH"
+    PATH='/saturn/docker/bin:$PATH'
 fi
 EOF
 }

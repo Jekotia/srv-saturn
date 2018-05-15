@@ -1,11 +1,7 @@
 #! /bin/bash
-if [[ ! `id -u` == "0" ]] ; then
-        echo "This script requires root/sudo!"
-        exit 99
-fi
+source $SRV_SCRIPT_INIT
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source $DIR/conf
+_isRoot "exit"
 
 apt update
 apt install -y python python-pip
