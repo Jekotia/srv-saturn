@@ -1,7 +1,7 @@
 #! /bin/bash
 
 ## takes variable name followed by value. e.g. _env "SRV_ROOT" "/saturn"
-
+puppetEnvFile=/saturn/puppet/envList
 function _envAdd () {
 	local targetFile=/etc/environment
 
@@ -12,7 +12,11 @@ function _envAdd () {
 	if ! cat ${targetFile} | grep "$1=$2" > /dev/null 2>&1 ; then
 		touch ${targetFile}
 		echo "export $1=$2" >> ${targetFile}
+		export $1=$2
 		echo "Added '$1=$2' and export directive to '${targetFile}'"
+		touch ${puppetEnvFile}
+		echo "\$$1 = \"$2\"" >> ${puppetEnvFile}
+		echo "Added '\$$1 = \"$2\"' to '${puppetEnvFile}'"
 	else
 		echo "Looks like '$1=$2' is already in '$targetFile'"
 	fi
