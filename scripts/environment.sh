@@ -75,7 +75,7 @@ _weechat_uid="2811"
 _weechat_gid="2811"
 
 
-_isRoot
+_isRoot "exit"
 
 rm -f ${envList}
 > /etc/environment
