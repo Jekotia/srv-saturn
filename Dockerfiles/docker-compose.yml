@@ -96,20 +96,20 @@ services:
 #    networks:
 #    - local
 
-#  nginx-proxy:
-#    image: jekotia/nginx
-#    container_name: "nginx"
-#    restart: unless-stopped
-#    volumes:
-#    - /saturn/data/nginx/conf:/etc/nginx:ro
+  nginx-proxy:
+    image: jekotia/nginx-proxy
+    container_name: "proxy"
+    restart: unless-stopped
+    volumes:
+    - /saturn/data/nginx/conf:/etc/nginx:ro
 #    - /saturn/data/nginx/www:/var/www:ro
 #    - /saturn/data/nginx/logs:/var/log/nginx
-#    - /saturn/data/cert:/cert:ro
-#    ports:
-#    - 80:80
-#    - 443:443
-#    networks:
-#    - local
+    - /saturn/data/ssl:/cert:ro
+    ports:
+    - 80:80
+    - 443:443
+    networks:
+    - local
 
 #  pivpn:
 #    image: jekotia/pivpn
