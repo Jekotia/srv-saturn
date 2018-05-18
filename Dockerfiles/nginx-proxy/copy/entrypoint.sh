@@ -1,3 +1,4 @@
-cp -n /defaults/* /etc/nginx
+#! /bin/bash
+cp -nr /defaults/* /etc/nginx
 
-su-exec proxy nginx -g daemon off
+su-exec proxy:proxy nginx -g daemon off
