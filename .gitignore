@@ -6,3 +6,4 @@ ref/
 queue/
 logs/
 puppet/envList
+puppet/puppetfile.pp
