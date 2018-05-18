@@ -17,14 +17,6 @@ RUN	apk add --no-cache --virtual \
 RUN	ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log
 
-##
-RUN	mkdir /defaults \
-	&& mv /etc/nginx/* /defaults \
-	&& chown -R proxy:proxy /defaults \
-
-COPY	copy/entrypoint.sh /
-RUN	chmod +x /entrypoint.sh
-
 RUN	[ "cross-build-end" ]
 
 VOLUME	/etc/nginx
