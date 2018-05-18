@@ -18,7 +18,7 @@ function _snippets () {
 function _general () {
 	apt-get update && apt-get upgrade -y && apt-get dis-upgrade -y || exit 1
 	echo 'alias docker="sudo docker"' >> /home/pi/.profile
-	echo 'alias docker="sudo docker-compose"' >> /home/pi/.profile
+	echo 'alias docker-compose="sudo docker-compose"' >> /home/pi/.profile
 }
 
 function _mounts () {
