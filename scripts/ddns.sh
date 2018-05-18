@@ -1,6 +1,6 @@
 #! /bin/bash
-source ${_SCRIPTS_INIT}
-source ${_SCRIPTS_ROOT}/ddns.conf
+source ${_SCRIPT_INIT}
+source ${_SCRIPT_ROOT}/ddns.conf
 
 duckURL="https://www.duckdns.org/update?domains=${duckDomains}&token=${duckToken}&ip=${duckIP}"
 
