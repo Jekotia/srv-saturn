@@ -101,7 +101,7 @@ services:
     container_name: "proxy"
     restart: unless-stopped
     volumes:
-    - /saturn/data/nginx/conf:/etc/nginx:ro
+    - /saturn/data/proxy/conf:/etc/nginx:ro
 #    - /saturn/data/nginx/www:/var/www:ro
 #    - /saturn/data/nginx/logs:/var/log/nginx
     - /saturn/data/ssl:/cert:ro
