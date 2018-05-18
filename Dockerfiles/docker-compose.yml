@@ -70,7 +70,7 @@ services:
     - "local"
 
   gogs:
-    image: jekotia/gogs
+    image: gogs/gogs-rpi
     container_name: "gogs"
     restart: unless-stopped
     volumes:
