@@ -39,8 +39,10 @@ _discordirc_uid="2137"
 _discordirc_gid="2137"
 
 _gogs_data="${_data}/gogs"
-_gogs_uid="2252"
-_gogs_gid="2252"
+_gogs_uid="1000"
+_gogs_gid="1000"
+#_gogs_uid="2252"
+#_gogs_gid="2252"
 
 _hass_data="${_data}/hass"
 _hass_uid="2307"
