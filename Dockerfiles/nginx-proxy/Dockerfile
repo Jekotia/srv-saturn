@@ -3,8 +3,7 @@ FROM	jekotia/resin-raspberrypi3-alpine
 ENV	UID=2665 \
 	GID=2665 \
 	USER=proxy \
-	GROUP=proxy \
-	DATA=/data
+	GROUP=proxy
 
 RUN	[ "cross-build-start" ]
 
@@ -22,22 +21,18 @@ RUN	ln -sf /dev/stdout /var/log/nginx/access.log \
 RUN	mkdir /defaults \
 	&& mv /etc/nginx/* /defaults \
 	&& chown -R proxy:proxy /defaults \
-	&& ln -sf /etc/nginx /data
 
 COPY	copy/entrypoint.sh /
 RUN	chmod +x /entrypoint.sh
 
 RUN	[ "cross-build-end" ]
 
-#COPY nginx.conf /etc/nginx/nginx.conf
-#COPY nginx.vh.default.conf /etc/nginx/conf.d/default.conf
-
-VOLUME $DATA
+VOLUME	/etc/nginx
+VOLUME	/cert
 
 EXPOSE	80
 EXPOSE	443
 
 STOPSIGNAL SIGTERM
 
-ENTRYPOINT [ "/entrypoint.sh" ]
-#CMD	["nginx", "-g", "daemon off;"]
+CMD	["nginx", "-g", "daemon off;"]
