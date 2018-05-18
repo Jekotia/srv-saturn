@@ -37,8 +37,8 @@ function _puppet() {
 }
 
 function _docker () {
-	${_ROOT}/docker/scripts/engine.sh || exit 30
-	${_ROOT}/docker/scripts/compose.sh || exit 31
+	${_ROOT}/docker/scripts/docker-engine.sh || exit 30
+	${_ROOT}/docker/scripts/docker-compose.sh || exit 31
 }
 
 function _pi () {
