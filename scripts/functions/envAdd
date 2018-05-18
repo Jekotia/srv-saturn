@@ -1,13 +1,13 @@
 #! /bin/bash
 
-## takes variable name followed by value. e.g. _env "SRV_ROOT" "/saturn"
+## takes variable name followed by value. e.g. _env "_ROOT" "/saturn"
 puppetEnvFile=/saturn/puppet/envList
 function _envAdd () {
 	local targetFile=/etc/environment
 
-	if ! cat /etc/sudoers | grep "Defaults" | grep "env_keep" | grep "SRV_" > /dev/null 2>&1 ; then
+	if ! cat /etc/sudoers | grep "Defaults" | grep "env_keep" | grep "_" > /dev/null 2>&1 ; then
 		echo '# Getting all of my server ENV vars into sudo for script execution' | sudo EDITOR='tee -a' visudo
-		echo 'Defaults	env_keep += "SRV_*"' | sudo EDITOR='tee -a' visudo
+		echo 'Defaults	env_keep += "_*"' | sudo EDITOR='tee -a' visudo
 	fi
 	if ! cat ${targetFile} | grep "$1=$2" > /dev/null 2>&1 ; then
 		touch ${targetFile}

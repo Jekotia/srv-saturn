@@ -1,5 +1,5 @@
 #! /bin/bash
-source $SRV_SCRIPT_INIT
+source ${_SCRIPT_INIT}
 
 _isRoot "exit"
 

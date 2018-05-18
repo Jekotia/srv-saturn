@@ -1,6 +1,6 @@
 #! /bin/bash
 
-source $SRV_SCRIPT_INIT
+source $_SCRIPT_INIT
 
 puppetDebURL="https://apt.puppetlabs.com/puppet5-release-stretch.deb"
 
@@ -10,7 +10,7 @@ function _snippets () {
 	fi
 	if [ ! -e $sslRoot/dns-01-manual ] ; then
 		git submodule add https://github.com/owhen/dns-01-manual.git $sslRoot/dns-01-manual
-		chmod +x ${SRV_ROOT}/ssl/dns-01-manual/hook.sh
+		chmod +x ${_ROOT}/ssl/dns-01-manual/hook.sh
 	fi
 }
 
@@ -22,10 +22,10 @@ function _general () {
 }
 
 function _mounts () {
-	mkdir -p ${SRV_DISK_MNT} || exit 10
+	mkdir -p ${_DISK_MNT} || exit 10
 
-#	echo "PARTUUID=${SRV_DISK_DEVtarget}  ${SRV_DISK_MNT}     ext4    defaults,noatime  0       1" >> /etc/fstab || exit 11
-	mount /dev/disk/${SRV_DISK_DEV}/${SRV_DISK_ID} ${SRV_DISK_MNT} || exit 12
+#	echo "PARTUUID=${_DISK_DEVtarget}  ${_DISK_MNT}     ext4    defaults,noatime  0       1" >> /etc/fstab || exit 11
+	mount /dev/disk/${_DISK_DEV}/${_DISK_ID} ${_DISK_MNT} || exit 12
 }
 
 function _puppet() {
@@ -37,26 +37,26 @@ function _puppet() {
 }
 
 function _docker () {
-	${SRV_ROOT}/docker/scripts/engine.sh || exit 30
-	${SRV_ROOT}/docker/scripts/compose.sh || exit 31
+	${_ROOT}/docker/scripts/engine.sh || exit 30
+	${_ROOT}/docker/scripts/compose.sh || exit 31
 }
 
 function _pi () {
 	rm -rf /tmp/zsh || exit 53
-	git clone ${SRV_ROOT}/data/gogs/git/jekotia/.zsh.git /tmp/zsh || exit 50
+	git clone ${_ROOT}/data/gogs/git/jekotia/.zsh.git /tmp/zsh || exit 50
 #	sed -i.bak 's/zshSource=.*/zshSource="\/saturn\/data\/gogs\/git\/jekotia\/.zsh.git"/g' /tmp/zsh/shell-setup.sh || exit 51
 	awk '{gsub(/zshSource=.*/,"zshSource=/saturn/data/gogs/git/jekotia/.zsh.git",column_number)}' /tmp/zsh/shell-setup.sh || exit 51
 #	bash /tmp/zsh/shell-setup.sh "pi" || exit 52
 }
 
 function _configure () {
-	puppet apply ${SRV_ROOT}/puppet/computer.pp
-	puppet apply ${SRV_ROOT}/puppet/users-groups.pp
-	puppet apply ${SRV_ROOT}/puppet/files.pp
-	puppet apply ${SRV_ROOT}/puppet/cron.pp
-	puppet apply ${SRV_ROOT}/puppet/symlinks.pp
-	puppet apply ${SRV_ROOT}/puppet/mounts.pp
-	puppet apply ${SRV_ROOT}/puppet/packages.pp
+	puppet apply ${_ROOT}/puppet/computer.pp
+	puppet apply ${_ROOT}/puppet/users-groups.pp
+	puppet apply ${_ROOT}/puppet/files.pp
+	puppet apply ${_ROOT}/puppet/cron.pp
+	puppet apply ${_ROOT}/puppet/symlinks.pp
+	puppet apply ${_ROOT}/puppet/mounts.pp
+	puppet apply ${_ROOT}/puppet/packages.pp
 }
 
 _isRoot "exit"
