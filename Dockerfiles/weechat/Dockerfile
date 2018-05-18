@@ -2,8 +2,8 @@ FROM	jekotia/resin-raspberrypi3-alpine
 
 ENV	TERM=screen-256color \
 	LANG=C.UTF-8 \
-	UID=1000 \
-	GID=1000 \
+	UID=2811 \
+	GID=2811 \
 	USER=weechat \
 	GROUP=weechat \
 	HOME=/home/weechat \
