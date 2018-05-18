@@ -10,7 +10,9 @@ RUN [ "/usr/bin/qemu-arm-static", "/bin/sh", "-c", "ln -s resin-xbuild /usr/bin/
 ENV	UID=2252 \
 	GID=2252 \
 	USER=gogs \
-	GROUP=gogs
+	GROUP=gogs \
+	PUID=2252 \
+	PGID=2252
 
 RUN	[ "cross-build-start" ]
 RUN	addgroup \
