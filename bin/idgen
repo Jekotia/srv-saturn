@@ -1,7 +1,8 @@
 #! /bin/bash
+prefix="2"
+
 conv () {
 	if [[ "$1" == "" ]] ; then
-		echo "NOPE"
 		exit 1
 	elif [[ "$1" == "A" || "$1" == "a" ]] ; then
 		num=0
@@ -64,4 +65,4 @@ c1=${1:0:1}
 c2=${1:1:1}
 c3=${1:2:1}
 
-echo $(conv $c1)$(conv $c2)$(conv $c3)
+echo ${prefix}$(conv $c1)$(conv $c2)$(conv $c3)
