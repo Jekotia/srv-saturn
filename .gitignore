@@ -5,3 +5,4 @@ test/
 ref/
 queue/
 logs/
+puppet/envList
