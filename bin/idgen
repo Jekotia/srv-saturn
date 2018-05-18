@@ -57,31 +57,11 @@ conv () {
 		num=9
 	fi
 
-	#echo `expr $num / 26`
-	#num=`awk -v num=$num 'BEGIN { print 1 - ( num / 26) }'`
 	echo $num
 }
 
 c1=${1:0:1}
 c2=${1:1:1}
 c3=${1:2:1}
-#c4=${1:3:1}
 
-#echo $c1
-#echo $c2
-#echo $c3
-#echo $c4
-
-#echo $(conv $c1)
-#echo $(conv $c2)
-#echo $(conv $c3)
-#echo $(conv $c4)
-
-#exit
-
-#i1s1o1=${output1:0:1} && i1s1o2=${output1:1:1}
-#i2s1o1=${output2:0:1} && i2s1o2=${output2:1:1}
-#i1s2o1=$(conv $i1s1o1) && i1s2o2=$(conv $i1s1o2)
-#i2s2o1=$(conv $i2s1o1) && i2s2o2=$(conv $i2s1o2)
-
-echo $(conv $c1)$(conv $c2)$(conv $c3) #$(conv $c4)
+echo $(conv $c1)$(conv $c2)$(conv $c3)
