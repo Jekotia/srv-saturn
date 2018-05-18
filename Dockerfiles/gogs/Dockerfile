@@ -27,5 +27,3 @@ RUN	addgroup \
 		-G $GROUP \
 		$USER
 RUN	[ "cross-build-end" ]
-
-USER	gogs
