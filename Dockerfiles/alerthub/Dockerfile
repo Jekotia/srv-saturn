@@ -2,8 +2,8 @@ FROM	jekotia/resin-raspberrypi3-alpine-node
 
 ENV	TERM=screen-256color \
 	LANG=C.UTF-8 \
-	UID=1000 \
-	GID=1000 \
+	UID=2041 \
+	GID=2041 \
 	USER=nodejs \
 	GROUP=nodejs \
 	DATA=/data \
