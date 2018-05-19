@@ -13,7 +13,7 @@ group { "weechat":
 
 cron { "weechat-ssl":
 	ensure		=> "present",
-	command		=> "$_WEECHAT_DATA/ssl.sh",
+	command		=> "$_ROOT/ssl/relay.sh",
 	user		=> "root",
 	minute		=> "0",
 	hour		=> "absent",
