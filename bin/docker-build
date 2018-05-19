@@ -7,6 +7,7 @@ imagePrefix="jekotia"
 function _usage () {
 	echo "This is a simple script for consistently building Docker images with the command:"
 	echo "	docker build -t TAG DIRECTORY"
+	echo "	docker build -t TAG DIRECTORY test"
 	echo "Authored by Josh 'Jekotia' Ameli, v${VER_NUM} ${VER_DATE}"
 	echo
 	echo "First argument MUST be a path to a directory".
@@ -18,9 +19,10 @@ function _build () {
 	echo
 	echo "Building '${imageTag}' from '$DIR'"
 	if docker build -t $imageTag $DIR $@ ; then
-		buildStatus="$?"
 		echo
 		echo "Finished building '${imageTag}' from '$DIR'"
+		docker push $imageTag
+		buildStatus="$?"
 	else
 		buildStatus="$?"
 		echo
@@ -45,8 +47,14 @@ elif	cd "$1" > /dev/null 2>&1 ; then # See if we can change to the target Docker
 	# Derive the image name from the directory the Dockerfile resides within
 	imageName="`basename $DIR`"
 	# Prepend the image name with '${imagePrefix}/' to get the tag
-	imageTag="${imagePrefix}/$imageName"
-
+	if [[ "$1" == "test" ]] ; then
+		imageTag="${imagePrefix}/test:${imageName}"
+		shift
+		test="true"
+	else
+		imageTag="${imagePrefix}/${imageName}"
+		test="false"
+	fi
 	echo "===================== Build parameters ====================="
 	echo "| DIR       =  $DIR"
 	echo "| imageName =  $imageName"
