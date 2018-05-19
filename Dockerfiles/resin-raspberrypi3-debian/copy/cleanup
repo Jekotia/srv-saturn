@@ -1,5 +1,6 @@
-apt-get auto-remove \
+#! /bin/bash
+apt-get autoremove \
 && apt-get clean \
-&& rm -f /var/lib/apt/lists/*
+&& rm -rf /var/lib/apt/lists/*
 
-return $?
+exit $?
