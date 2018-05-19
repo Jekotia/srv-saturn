@@ -18,8 +18,8 @@ services:
     container_name: "watchtower"
     restart: unless-stopped
     command: --cleanup
-    networks:
-    - "local"
+#    networks:
+#    - "local"
     volumes:
     - "/var/run/docker.sock:/var/run/docker.sock"
     environment:
@@ -51,12 +51,12 @@ services:
     - MYSQL_USER_PASSWORD=${DB_PASSWORD}
     - MYSQL_USER_PASSWORD=${DB_DATABASE}
 
-#  alerthub:
-#    image: jekotia/alerthub
-#    container_name: "alerthub"
-#    restart: unless-stopped
-#    volumes:
-#    - "/saturn/data/alerthub/config.js:/data/config.js:ro"
+  alerthub:
+    image: jekotia/alerthub
+    container_name: "alerthub"
+    restart: unless-stopped
+    volumes:
+    - "/saturn/data/alerthub/config.js:/data/config.js:ro"
 #    networks:
 #    - "out"
 
@@ -171,10 +171,10 @@ services:
     volumes:
     - "/saturn/data/weechat:/data"
     ports:
-    - "9001:9001"
+#    - "9001:9001"
     - "8443:8443"
-    networks:
-    - proxy
+#    networks:
+#    - proxy
     stdin_open: true
     tty: true
 
