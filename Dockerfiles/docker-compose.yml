@@ -8,10 +8,10 @@ services:
     volumes:
     - "/saturn/data/portainer:/data"
     - "/var/run/docker.sock:/var/run/docker.sock"
-    ports:
-    - "9000:80"
+#    ports:
+#    - "9000:80"
     networks:
-    - "local"
+    - "proxy"
 
   watchtower:
     image: v2tec/watchtower:armhf-0.3
@@ -66,8 +66,8 @@ services:
     restart: unless-stopped
     volumes:
     - "/saturn/data/discord-irc:/data"
-    networks:
-    - "local"
+#    networks:
+#    - "local"
 
   gogs:
     image: gogs/gogs-rpi
@@ -79,7 +79,7 @@ services:
     - "10022:22"
     - "3000:3000"
     networks:
-    - "local"
+    - "proxy"
     depends_on:
     - "mysql"
 
@@ -94,14 +94,14 @@ services:
 #    ports:
 #    - 3580:80
 #    networks:
-#    - local
+#    - proxy
 
   nginx-proxy:
     image: jekotia/nginx-proxy
     container_name: "proxy"
     restart: unless-stopped
     volumes:
-    - /saturn/data/proxy/conf:/etc/nginx:ro
+    - /saturn/data/proxy:/etc/nginx:ro
 #    - /saturn/data/nginx/www:/var/www:ro
 #    - /saturn/data/nginx/logs:/var/log/nginx
     - /saturn/data/ssl:/cert:ro
@@ -109,7 +109,7 @@ services:
     - 80:80
     - 443:443
     networks:
-    - local
+    - proxy
 
 #  pivpn:
 #    image: jekotia/pivpn
@@ -120,7 +120,7 @@ services:
 #    ports:
 #    - "1194:1194"
 #    networks:
-#    - local
+#    - proxy
 #    - out
 
 #  pihole:
@@ -134,7 +134,7 @@ services:
 #    - "80:80"
 #    - "53:53"
 #    networks:
-#    - local
+#    - proxy
 #    environment:
 # Set to your server's external IP to block ads fully
 #    - ServerIP=
@@ -174,14 +174,12 @@ services:
     - "9001:9001"
     - "8443:8443"
     networks:
-    - local
+    - proxy
     stdin_open: true
     tty: true
 
 networks:
+  proxy:
+    driver: bridge
   local:
     driver: bridge
-  out:
-    driver: bridge
-#  proxy
-#    driver: bridge
