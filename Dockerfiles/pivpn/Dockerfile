@@ -1,9 +1,10 @@
-FROM	jekotia/resin-raspberrypi3-debian
+#FROM	jekotia/resin-raspberrypi3-debian
+FROM	resin/armv7hf-debian
 
 ENV	TERM=screen-256color \
 	LANG=C.UTF-8 \
-	UID=1000 \
-	GID=1000 \
+	UID=2638 \
+	GID=2638 \
 	USER=pivpn \
 	GROUP=pivpn \
 	HOME=/home/pivpn \
