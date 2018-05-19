@@ -6,10 +6,13 @@ COPY	copy/cleanup /usr/bin
 ###
 RUN	[ "cross-build-start" ]
 
-RUN	dpkg-reconfigure tzdata \
+RUN	apt-get update \
+	&& apt-get upgrade -y \
+	&& dpkg-reconfigure tzdata \
 	&& echo "America/Toronto" > /etc/timezone \
 	&& dpkg-reconfigure -f noninteractive tzdata \
-	&& chmod +x /usr/bin/cleanup
+	&& chmod +x /usr/bin/cleanup \
+	&& cleanup
 
 RUN	[ "cross-build-end" ]
 ###
