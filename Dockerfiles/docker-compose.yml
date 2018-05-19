@@ -100,6 +100,9 @@ services:
     image: jekotia/nginx-proxy
     container_name: "proxy"
     restart: unless-stopped
+    environment:
+    - API_KEY=${AMPLIFY_API_KEY}
+    - AMPLIFY_IMAGENAME=${AMPLIFY_IMAGENAME}
     volumes:
     - /saturn/data/proxy:/etc/nginx:ro
 #    - /saturn/data/nginx/www:/var/www:ro
