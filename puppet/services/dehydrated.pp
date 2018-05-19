@@ -11,6 +11,18 @@ group { "dehydrated":
 	system		=> "true",
 }
 
+cron { "dehydrated-ssl":
+	ensure		=> "present",
+	command		=> "$_ROOT/ssl/run.sh",
+	user		=> "root",
+	minute		=> "0",
+	hour		=> "absent",
+	monthday	=> "absent",
+	month		=> "absent",
+	weekday		=> "absent",
+	special		=> "absent",
+}
+
 file { "dehydrated data folder":
 	path		=> "$_DEHYDRATED_DATA",
 	ensure		=> "directory",
