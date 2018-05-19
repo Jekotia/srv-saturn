@@ -1,0 +1,5 @@
+apt-get auto-remove \
+&& apt-get clean \
+&& rm -f /var/lib/apt/lists/*
+
+return $?

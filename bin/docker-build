@@ -19,10 +19,13 @@ function _build () {
 	echo
 	echo "Building '${imageTag}' from '$DIR'"
 	if docker build -t $imageTag $DIR $@ ; then
+		buildStatus="$?"
 		echo
 		echo "Finished building '${imageTag}' from '$DIR'"
-		docker push $imageTag
-		buildStatus="$?"
+		if [[ "$test" == "true" ]] ; then
+			docker push $imageTag
+			buildStatus="$?"
+		fi
 	else
 		buildStatus="$?"
 		echo
@@ -42,7 +45,7 @@ elif	cd "$1" > /dev/null 2>&1 ; then # See if we can change to the target Docker
 	shift
 
 	# Save the full path of our new location to a variable. We'll need to manipulate this string a little
-	# This allows us to maintain full functionality even when someone runs `docker-build ./`
+	# This allows us to maintain full functionality even when someone runs `docker-build .`
 	DIR="`pwd`"
 	# Derive the image name from the directory the Dockerfile resides within
 	imageName="`basename $DIR`"
