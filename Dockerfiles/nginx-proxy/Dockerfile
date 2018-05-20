@@ -8,16 +8,14 @@ ENV	UID=2665 \
 RUN	[ "cross-build-start" ]
 
 RUN	addgroup -g ${GID} -S ${GROUP} \
-	&& adduser -D -S -s /sbin/nologin -G ${GROUP} ${USER}
+	&& adduser -D -S -s /sbin/nologin -G ${GROUP} ${USER} \
+	&& apk add --no-cache --virtual \
+		nginx \
+	# forward request and error logs to docker log collector \
+	&& ln -sf /dev/stdout /var/log/nginx/access.log \
+	&& ln -sf /dev/stderr /var/log/nginx/error.log \
+	&& mkdir -p /run/nginx
 
-RUN	apk add --no-cache --virtual \
-		nginx
-
-	# forward request and error logs to docker log collector
-RUN	ln -sf /dev/stdout /var/log/nginx/access.log \
-	&& ln -sf /dev/stderr /var/log/nginx/error.log
-
-RUN	mkdir -p /run/nginx
 RUN	[ "cross-build-end" ]
 
 VOLUME	/etc/nginx

@@ -1,0 +1,72 @@
+FROM	jekotia/resin-raspberrypi3-debian
+
+ENV	UID=2665 \
+	GID=2665 \
+	USER=proxy \
+	GROUP=proxy
+
+RUN	[ "cross-build-start" ]
+
+RUN	userdel proxy \
+	&& addgroup \
+		--gid $GID \
+		--system \
+		$GROUP \
+	&& adduser \
+		--uid $UID \
+		--disabled-password \
+		--system \
+		--shell /sbin/nologin \
+		--gid $GID \
+		$USER
+
+RUN	apt-get update \
+	&& apt-get install -y \
+		nginx \
+ 	# forward request and error logs to docker log collector \
+	&& ln -sf /dev/stdout /var/log/nginx/access.log \
+	&& ln -sf /dev/stderr /var/log/nginx/error.log \
+	&& mkdir -p /run/nginx \
+	&& cleanup
+
+RUN	apt-get update \
+	&& apt-get install -y \
+		curl \
+		python2.7
+
+RUN	apt-get install -y apt-file
+RUN	apt-file update
+
+RUN	apt-get install -y lsb-release
+RUN	curl -fs http://nginx.org/keys/nginx_signing.key | apt-key add - \
+	&& codename=`lsb_release -cs` && \
+		os=`lsb_release -is | tr '[:upper:]' '[:lower:]'` && \
+		echo "deb http://packages.amplify.nginx.com/${os}/ ${codename} amplify-agent" > \
+		/etc/apt/sources.list.d/nginx-amplify.list \
+	&& cat /etc/apt/sources.list.d/nginx-amplify.list \
+	&& apt-get update \
+	&& apt-get install nginx-amplify-agent \
+\
+	&& apt-get remove curl \
+	&& cleanup
+
+COPY	copy/agent.conf /etc/amplify-agent/agent.conf
+COPY	copy/entrypoint.sh /
+RUN	chmod +x /entrypoint.sh; \
+	chmod +r /proc
+
+RUN	[ "cross-build-end" ]
+
+VOLUME	/etc/nginx
+VOLUME	/cert
+
+EXPOSE	80
+EXPOSE	443
+
+STOPSIGNAL SIGTERM
+
+
+# TO set/override API_KEY and AMPLIFY_IMAGENAME when starting an instance:
+# docker run --name my-nginx1 -e API_KEY='..effc' -e AMPLIFY_IMAGENAME="service-name" -d nmhung1210/nginx-alpine-amplify
+ENTRYPOINT [ "/entrypoint.sh" ]
+#CMD	["nginx", "-g", "daemon off;"]
