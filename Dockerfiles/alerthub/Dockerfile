@@ -34,12 +34,12 @@ RUN	mkdir -p $HOME \
 RUN	apk add \
 		git \
 		su-exec \
-	&& su-exec $USER$GROUP git clone https://github.com/Ardakilic/alerthub.git $APPDIR \
+	&& su-exec $USER:$GROUP git clone https://github.com/Ardakilic/alerthub.git $APPDIR \
 	&& rm -f $CONFIG \
 	&& ln -s /data/config.js $CONFIG \
 	&& cd $APPDIR \
-	&& su-exec $USER$GROUP npm install \
-	&& su-exec $USER$GROUP npm run init \
+	&& su-exec $USER:$GROUP npm install \
+	&& su-exec $USER:$GROUP npm run init \
 	&& chown -R $UID:$GID $HOME \
 	&& chown -R $UID:$GID $DATA
 
