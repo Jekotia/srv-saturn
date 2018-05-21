@@ -31,6 +31,11 @@ file { "$_ROOT":
 	target		=> "$_DISK_MNT$_DISK_PATH",
 }
 
+file { "/etc/ssmtp":
+	ensure		=> "link",
+	target		=> "$_DATA/ssmtp",
+}
+
 file { "/etc/nginx":
 	ensure		=> "link",
 	target		=> "$_NGINX_DATA",
