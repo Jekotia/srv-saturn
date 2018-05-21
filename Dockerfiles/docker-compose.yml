@@ -114,18 +114,6 @@ services:
     networks:
     - proxy
 
-#  pivpn:
-#    image: jekotia/pivpn
-#    container_name: "pivpn"
-#    restart: unless-stopped
-#    volumes:
-#    - /saturn/data/pivpn:/data
-#    ports:
-#    - "1194:1194"
-#    networks:
-#    - proxy
-#    - out
-
   pihole:
     image: diginc/pi-hole-multiarch:debian_armhf
     container_name: "pihole"
