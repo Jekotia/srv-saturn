@@ -1,11 +1,11 @@
-user { "nginx":
+user { "$_NGINX_USER":
 	ensure		=> "present",
 	uid		=> "$_NGINX_UID",
 	gid		=> "$_NGINX_GID",
 	membership	=> "inclusive",
 	system		=> "true",
 }
-group { "nginx":
+group { "$_NGINX_GROUP":
 	ensure		=> "present",
 	gid		=> "$_NGINX_GID",
 	system		=> "true",

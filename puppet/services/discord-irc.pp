@@ -1,11 +1,11 @@
-user { "discord-irc":
+user { "$_DISCORDIRC_USER":
 	ensure		=> "present",
 	uid		=> "$_DISCORDIRC_UID",
 	gid		=> "$_DISCORDIRC_GID",
 	membership	=> "inclusive",
 	system		=> "true",
 }
-group { "discord-irc":
+group { "$_DISCORDIRC_GROUP":
 	ensure		=> "present",
 	gid		=> "$_DISCORDIRC_GID",
 	system		=> "true",

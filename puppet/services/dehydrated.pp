@@ -1,11 +1,11 @@
-user { "dehydrated":
+user { "$_DEHYDRATED_USER":
 	ensure		=> "present",
 	uid		=> "$_DEHYDRATED_UID",
 	gid		=> "$_DEHYDRATED_GID",
 	membership	=> "inclusive",
 	system		=> "true",
 }
-group { "dehydrated":
+group { "$_DEHYDRATED_GROUP":
 	ensure		=> "present",
 	gid		=> "$_DEHYDRATED_GID",
 	system		=> "true",

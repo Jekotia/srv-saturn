@@ -1,11 +1,11 @@
-user { "hass":
+user { "$_HASS_USER":
 	ensure		=> "present",
 	uid		=> "$_HASS_UID",
 	gid		=> "$_HASS_GID",
 	membership	=> "inclusive",
 	system		=> "true",
 }
-group { "hass":
+group { "$_HASS_GROUP":
 	ensure		=> "present",
 	gid		=> "$_HASS_GID",
 	system		=> "true",

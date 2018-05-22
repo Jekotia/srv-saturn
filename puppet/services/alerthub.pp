@@ -1,11 +1,11 @@
-user { "alerthub":
+user { "$_ALERTHUB_USER":
 	ensure		=> "present",
 	uid		=> "$_ALERTHUB_UID",
 	gid		=> "$_ALERTHUB_GID",
 	membership	=> "inclusive",
 	system		=> "true",
 }
-group { "alerthub":
+group { "$_ALERTHUB_GROUP":
 	ensure		=> "present",
 	gid		=> "$_ALERTHUB_GID",
 	system		=> "true",

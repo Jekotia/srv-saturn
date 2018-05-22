@@ -1,11 +1,11 @@
-user { "gogs":
+user { "$_GOGS_USER":
 	ensure		=> "present",
 	uid		=> "$_GOGS_UID",
 	gid		=> "$_GOGS_GID",
 	membership	=> "inclusive",
 	system		=> "true",
 }
-group { "gogs":
+group { "$_GOGS_GROUP":
 	ensure		=> "present",
 	gid		=> "$_GOGS_GID",
 	system		=> "true",

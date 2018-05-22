@@ -1,11 +1,11 @@
-user { "proxy":
+user { "$_PROXY_USER":
 	ensure		=> "present",
 	uid		=> "$_PROXY_UID",
 	gid		=> "$_PROXY_GID",
 	membership	=> "inclusive",
 	system		=> "true",
 }
-group { "proxy":
+group { "$_PROXY_GROUP":
 	ensure		=> "present",
 	gid		=> "$_PROXY_GID",
 	system		=> "true",

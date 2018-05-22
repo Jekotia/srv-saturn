@@ -1,13 +1,12 @@
-user { "pivpn":
+user { "$_PIVPN_USER":
 	ensure		=> "present",
 	uid		=> "$_PIVPN_UID",
 	gid		=> "$_PIVPN_GID",
 	membership	=> "inclusive",
 	system		=> "true",
-#	managehome	=> "true",
 	home		=> "/home/pivpn",
 }
-group { "pivpn":
+group { "$_PIVPN_GROUP":
 	ensure		=> "present",
 	gid		=> "$_PIVPN_GID",
 	system		=> "true",

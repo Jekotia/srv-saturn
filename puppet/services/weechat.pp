@@ -1,11 +1,11 @@
-user { "weechat":
+user { "$_WEECHAT_USER":
 	ensure		=> "present",
 	uid		=> "$_WEECHAT_UID",
 	gid		=> "$_WEECHAT_GID",
 	membership	=> "inclusive",
 	system		=> "true",
 }
-group { "weechat":
+group { "$_WEECHAT_GROUP":
 	ensure		=> "present",
 	gid		=> "$_WEECHAT_GID",
 	system		=> "true",

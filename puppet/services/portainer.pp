@@ -1,11 +1,11 @@
-user { "portainer":
+user { "$_PORTAINER_USER":
 	ensure		=> "present",
 	uid		=> "$_PORTAINER_UID",
 	gid		=> "$_PORTAINER_GID",
 	membership	=> "inclusive",
 	system		=> "true",
 }
-group { "portainer":
+group { "$_PORTAINER_GROUP":
 	ensure		=> "present",
 	gid		=> "$_PORTAINER_GID",
 	system		=> "true",
