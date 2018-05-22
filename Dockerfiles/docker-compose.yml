@@ -84,18 +84,18 @@ services:
     depends_on:
     - "mysql"
 
-#  hass:
-#    image: homeassistant/raspberrypi3-homeassistant:0.68.1
-#    container_name: "hass"
-#    restart: unless-stopped
-#    volumes:
-#    - /path/to/your/config:/config
-#    - /etc/localtime:/etc/localtime:ro
-#/saturn/data/hass:/data
-#    ports:
-#    - 3580:80
-#    networks:
-#    - proxy
+  hass:
+    image: homeassistant/raspberrypi3-homeassistant:0.68.1
+    container_name: "hass"
+    restart: unless-stopped
+    volumes:
+    - /saturn/data/hass:/config
+    - /etc/localtime:/etc/localtime:ro
+#    - /saturn/data/hass:/data
+    ports:
+    - 3580:80
+    networks:
+    - proxy
 
   nginx-proxy:
     image: jekotia/nginx-proxy
