@@ -92,8 +92,8 @@ services:
     - /saturn/data/hass:/config
     - /etc/localtime:/etc/localtime:ro
 #    - /saturn/data/hass:/data
-    ports:
-    - 3580:80
+#    ports:
+#    - 3580:80
     networks:
     - proxy
 
