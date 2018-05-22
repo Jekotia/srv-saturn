@@ -80,6 +80,7 @@ services:
     - "3000:3000"
     networks:
     - "proxy"
+    - "local"
     depends_on:
     - "mysql"
 
