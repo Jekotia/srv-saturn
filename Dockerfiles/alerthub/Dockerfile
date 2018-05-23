@@ -31,7 +31,7 @@ RUN	mkdir -p $HOME \
 		-G $GROUP \
 		$USER
 
-RUN	apk add \
+RUN	apk add --no-cache --virtual \
 		git \
 		su-exec \
 	&& su-exec $USER:$GROUP git clone https://github.com/Ardakilic/alerthub.git $APPDIR \

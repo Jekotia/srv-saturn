@@ -6,7 +6,7 @@ FROM resin/raspberrypi3-alpine
 RUN	[ "cross-build-start" ]
 
 RUN	apk -U upgrade \
-	&& apk add \
+	&& apk add --no-cache --virtual \
 		tzdata \
 		su-exec \
 	&& cp /usr/share/zoneinfo/America/Toronto /etc/localtime \
