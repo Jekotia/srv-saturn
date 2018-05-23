@@ -27,7 +27,7 @@ RUN	apt-get update \
 	&& ln -sf /dev/stdout /var/log/nginx/access.log \
 	&& ln -sf /dev/stderr /var/log/nginx/error.log \
 	&& mkdir -p /run/nginx \
-	&& cleanup
+	&& apt-cleanup
 
 RUN	apt-get update \
 	&& apt-get install -y \

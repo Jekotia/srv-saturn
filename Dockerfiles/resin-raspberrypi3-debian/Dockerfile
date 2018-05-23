@@ -1,5 +1,5 @@
 FROM	resin/raspberrypi3-debian
-COPY	copy/cleanup /usr/bin
+COPY	copy/apt-cleanup /usr/bin
 
 #
 ##
@@ -11,8 +11,8 @@ RUN	apt-get update \
 	&& dpkg-reconfigure tzdata \
 	&& echo "America/Toronto" > /etc/timezone \
 	&& dpkg-reconfigure -f noninteractive tzdata \
-	&& chmod +x /usr/bin/cleanup \
-	&& cleanup
+	&& chmod +x /usr/bin/apt-cleanup \
+	&& apt-cleanup
 
 RUN	[ "cross-build-end" ]
 ###
