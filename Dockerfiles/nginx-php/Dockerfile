@@ -19,4 +19,4 @@ RUN	apk add --no-cache --virtual \
 
 RUN	[ "cross-build-end" ]
 
-CMD     nginx -g "daemon off" ; 
+CMD     nginx -g "daemon off" ;
