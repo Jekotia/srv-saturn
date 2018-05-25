@@ -31,15 +31,16 @@ RUN	mkdir -p $HOME \
 		-G $GROUP \
 		$USER
 
-RUN	apk add --no-cache --virtual \
+RUN	apk add --no-cache \
 		git \
-		su-exec \
-	&& su-exec $USER:$GROUP git clone https://github.com/Ardakilic/alerthub.git $APPDIR \
-	&& rm -f $CONFIG \
-	&& ln -s /data/config.js $CONFIG \
+		su-exec
+
+RUN	su-exec $USER:$GROUP git clone https://github.com/Ardakilic/alerthub.git $APPDIR \
 	&& cd $APPDIR \
 	&& su-exec $USER:$GROUP npm install \
 	&& su-exec $USER:$GROUP npm run init \
+	&& rm -f $CONFIG \
+	&& ln -sf /data/config.js $CONFIG \
 	&& chown -R $UID:$GID $HOME \
 	&& chown -R $UID:$GID $DATA
 
@@ -51,4 +52,5 @@ RUN [ "cross-build-end" ]
 VOLUME $DATA/config.js
 
 USER $USER
-CMD cd $APPDIR && npm start
+WORKDIR $APPDIR
+CMD npm start
