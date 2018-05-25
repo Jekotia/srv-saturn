@@ -35,4 +35,4 @@ RUN	[ "cross-build-end" ]
 ##
 #
 
-CMD	[ "rbi" ]
+CMD	[ "irb" ]
