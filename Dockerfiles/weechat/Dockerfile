@@ -1,20 +1,9 @@
-FROM	jekotia/resin-raspberrypi3-alpine
+FROM	resin/raspberrypi3-alpine
 
-ENV	TERM=screen-256color \
-	LANG=C.UTF-8 \
-	UID=2811 \
-	GID=2811 \
-	USER=weechat \
-	GROUP=weechat \
-	HOME=/home/weechat \
-	DATA=/data
-
-COPY	copy/entrypoint.sh /
-
-#
-##
-###
 RUN	[ "cross-build-start" ]
+###
+##
+#
 
 RUN	BUILD_DEPS=" \
 	cmake \
@@ -48,13 +37,31 @@ RUN	BUILD_DEPS=" \
 	&& tar xzf /tmp/weechat.tar.gz --strip 1 -C /tmp/weechat \
 	&& cd /tmp/weechat/build \
 	&& cmake .. -DCMAKE_INSTALL_PREFIX=/usr \
-	&& make && make install \
-	&& apk del ${BUILD_DEPS} \
-	&& rm -rf /var/cache/apk/* \
-	&& rm -rf /tmp/* \
-	&& chmod +x /entrypoint.sh \
+	&& make && make install
+
+
+FROM	jekotia/resin-raspberrypi3-alpine
+COPY	--from=0 /usr/bin/weechat /usr/bin/weechat
+
+ENV	TERM=screen-256color \
+	LANG=C.UTF-8 \
+	UID=2811 \
+	GID=2811 \
+	USER=weechat \
+	GROUP=weechat \
+	HOME=/home/weechat \
+	DATA=/data
+
+COPY	copy/entrypoint.sh /
+
+RUN	[ "cross-build-start" ]
+###
+##
+#
+
+RUN	chmod +x /entrypoint.sh \
 	&& mkdir -p $DATA \
-	&& mkdir -p $HOME \
+#	&& mkdir -p $HOME \
 	&& addgroup \
 		-g $GID \
 		-S $GROUP \
@@ -62,19 +69,19 @@ RUN	BUILD_DEPS=" \
 		-u $UID \
 		-D \
 		-S \
-		-h $HOME \
+#		-h $HOME \
 		-s /sbin/nologin \
 		-G $GROUP \
 		$USER
-
-RUN	[ "cross-build-end" ]
-###
-##
 #
+##
+###
+RUN	[ "cross-build-end" ]
 
 VOLUME $DATA
 
-WORKDIR $HOME
+WORKDIR $DATA
+#$HOME
 
 EXPOSE 8443
 
