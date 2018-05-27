@@ -29,7 +29,6 @@ RUN	BUILD_DEPS=" \
 	perl \
 	curl \
 	shadow \
-	tmux \
 	&& update-ca-certificates \
 	&& WEECHAT_TARBALL="$(curl -sS https://api.github.com/repos/weechat/weechat/releases/latest | jq .tarball_url -r)" \
 	&& curl -sSL $WEECHAT_TARBALL -o /tmp/weechat.tar.gz \
@@ -58,6 +57,8 @@ RUN	[ "cross-build-start" ]
 ###
 ##
 #
+RUN	apk add --no-cache \
+		tmux
 
 RUN	chmod +x /entrypoint.sh \
 	&& mkdir -p $DATA \
