@@ -22,12 +22,12 @@ RUN	BUILD_DEPS=" \
 	tar" \
 	&& apk add --no-cache \
 	${BUILD_DEPS} \
-	gnutls \
 	ncurses \
 	libgcrypt \
 	python \
 	perl \
 	curl \
+	gnutls \
 	shadow \
 	&& update-ca-certificates \
 	&& WEECHAT_TARBALL="$(curl -sS https://api.github.com/repos/weechat/weechat/releases/latest | jq .tarball_url -r)" \
@@ -41,6 +41,9 @@ RUN	BUILD_DEPS=" \
 
 FROM	jekotia/resin-raspberrypi3-alpine
 COPY	--from=0 /usr/bin/weechat /usr/bin/weechat
+COPY	--from=0 /usr/bin/weechat-curses /usr/bin/weechat-curses
+COPY	--from=0 /usr/bin/weechat-headless /usr/bin/weechat-headless
+COPY	--from=0 /usr/lib/weechat /usr/lib/weechat
 
 ENV	TERM=screen-256color \
 	LANG=C.UTF-8 \
@@ -58,7 +61,15 @@ RUN	[ "cross-build-start" ]
 ##
 #
 RUN	apk add --no-cache \
-		tmux
+		ncurses \
+		libgcrypt \
+		python \
+		perl \
+		curl \
+		gnutls \
+		tmux \
+		curl \
+		shadow
 
 RUN	chmod +x /entrypoint.sh \
 	&& mkdir -p $DATA \
