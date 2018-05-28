@@ -24,7 +24,7 @@ RUN BUILD_DEPS=" \
 	ca-certificates \
 	jq \
 	tar" \
-	&& apk -U upgrade && apk add --no-cache --virtual \
+	&& apk -U upgrade && apk add --no-cache \
 	${BUILD_DEPS} \
 	gnutls \
 	ncurses \

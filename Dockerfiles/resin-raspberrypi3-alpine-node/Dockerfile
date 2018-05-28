@@ -6,7 +6,7 @@ FROM	resin/raspberrypi3-alpine-node
 RUN	[ "cross-build-start" ]
 
 RUN	apk -U upgrade \
-	&& apk add tzdata --no-cache --virtual \
+	&& apk add tzdata --no-cache \
 	&& npm i -g npm \
 	&& cp /usr/share/zoneinfo/America/Toronto /etc/localtime \
 	&& echo "America/Toronto" >  /etc/timezone \

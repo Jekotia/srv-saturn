@@ -15,7 +15,7 @@ COPY	copy/entrypoint.sh /
 ###
 RUN	[ "cross-build-start" ]
 
-RUN	apk add --no-cache --virtual
+RUN	apk add --no-cache \
 
 RUN	chmod +x /entrypoint.sh \
 	&& mkdir -p $DATA \

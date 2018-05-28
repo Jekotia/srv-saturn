@@ -2,19 +2,21 @@ FROM	jekotia/nginx
 
 RUN	[ "cross-build-start" ]
 
-RUN	apk add --no-cache --virtual \
+RUN	apk --update add --no-cache \
 		php7 \
 		php7-fpm \
-		php-pear \
+		php7-pear \
 		php7-common \
 		php7-mcrypt \
-		php7-mysql \
+		php7-pdo_mysql \
+		php7-mysqli \
+		php7-mysqlnd \
 		php7-cli \
 		php7-gd \
 		php7-curl \
-		php-apc
+		php7-apcu
 
-RUN	apk add --no-cache --virtual \
+RUN	apk add --no-cache \
 		supervisor
 
 RUN	[ "cross-build-end" ]
