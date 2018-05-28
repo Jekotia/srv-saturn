@@ -1,6 +1,30 @@
 version: '3'
 
 services:
+  nginx-proxy:
+    image: jekotia/nginx-proxy
+    container_name: "proxy"
+    restart: unless-stopped
+    depends_on:
+    - "portainer"
+    - "alerthub"
+    - "hass"
+    - "pihole"
+    - "weechat"
+    environment:
+    - API_KEY=${AMPLIFY_API_KEY}
+    - AMPLIFY_IMAGENAME=${AMPLIFY_IMAGENAME}
+    volumes:
+    - /saturn/data/proxy:/etc/nginx:ro
+#    - /saturn/data/nginx/www:/var/www:ro
+#    - /saturn/data/nginx/logs:/var/log/nginx
+    - /saturn/data/ssl:/cert:ro
+    ports:
+    - 80:80
+    - 443:443
+    networks:
+    - proxy
+
   portainer:
     image: portainer/portainer
     container_name: "portainer"
@@ -96,27 +120,6 @@ services:
     volumes:
     - /saturn/data/hass:/config
     - /etc/localtime:/etc/localtime:ro
-#    - /saturn/data/hass:/data
-#    ports:
-#    - 3580:80
-    networks:
-    - proxy
-
-  nginx-proxy:
-    image: jekotia/nginx-proxy
-    container_name: "proxy"
-    restart: unless-stopped
-    environment:
-    - API_KEY=${AMPLIFY_API_KEY}
-    - AMPLIFY_IMAGENAME=${AMPLIFY_IMAGENAME}
-    volumes:
-    - /saturn/data/proxy:/etc/nginx:ro
-#    - /saturn/data/nginx/www:/var/www:ro
-#    - /saturn/data/nginx/logs:/var/log/nginx
-    - /saturn/data/ssl:/cert:ro
-    ports:
-    - 80:80
-    - 443:443
     networks:
     - proxy
 
@@ -127,9 +130,9 @@ services:
     volumes:
     - "/saturn/data/pihole/etc:/etc/pihole"
     - "/saturn/data/pihole/dnsmasq.d:/etc/dnsmasq.d"
-    ports:
-    - "5080:80"
-    - "53:53"
+#    ports:
+#    - "5080:80"
+#    - "53:53"
     networks:
     - proxy
     environment:
@@ -167,11 +170,8 @@ services:
     restart: unless-stopped
     volumes:
     - "/saturn/data/weechat:/data"
-    ports:
-#    - "9001:9001"
-    - "8443:8443"
-#    networks:
-#    - proxy
+    networks:
+    - proxy
     stdin_open: true
     tty: true
 
@@ -179,8 +179,8 @@ services:
     image: jekotia/smtp-relay
     container_name: "mailer"
     restart: "unless-stopped"
-    ports:
-    - "25:25"
+#    ports:
+#    - "25:25"
     networks:
     - "mail"
     environment:
