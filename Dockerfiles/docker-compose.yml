@@ -5,12 +5,12 @@ services:
     image: jekotia/nginx-proxy
     container_name: "proxy"
     restart: unless-stopped
-    depends_on:
-    - "portainer"
-    - "alerthub"
-    - "hass"
-    - "pihole"
-    - "weechat"
+#    depends_on:
+#    - "portainer"
+#    - "alerthub"
+#    - "hass"
+#    - "pihole"
+#    - "weechat"
     environment:
     - API_KEY=${AMPLIFY_API_KEY}
     - AMPLIFY_IMAGENAME=${AMPLIFY_IMAGENAME}
@@ -25,17 +25,19 @@ services:
     networks:
     - proxy
 
-  portainer:
-    image: portainer/portainer
-    container_name: "portainer"
-    restart: unless-stopped
-    volumes:
-    - "/saturn/data/portainer:/data"
-    - "/var/run/docker.sock:/var/run/docker.sock"
-#    ports:
-#    - "9000:80"
-    networks:
-    - "proxy"
+#  portainer:
+#    image: portainer/portainer:linux-arm-1.16.5
+#    container_name: "portainer"
+#    restart: unless-stopped
+#    command: -H unix:///var/run/docker.sock
+#    privileged: true
+#    volumes:
+#    - "/saturn/data/portainer:/data"
+#    - "/var/run/docker.sock:/var/run/docker.sock"
+##    ports:
+##    - "9000:9000"
+#    networks:
+#    - "proxy"
 
   watchtower:
     image: v2tec/watchtower:armhf-0.3
