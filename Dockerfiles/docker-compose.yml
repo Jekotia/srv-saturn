@@ -43,6 +43,7 @@ services:
 #    container_name: "mysql"
 #    restart: "unless-stopped"
 #    networks:
+#    - "database"
 #    - "local"
 #    volumes:
 #    - "/docker/data/mysql:/var/lib/mysql"
@@ -58,8 +59,11 @@ services:
     restart: unless-stopped
     volumes:
     - "/saturn/data/alerthub/config.js:/data/config.js:ro"
-#    networks:
-#    - "out"
+#    ports:
+#    - "3444:3444"
+    networks:
+    - "proxy"
+    - "mail"
 
   discord-irc:
     image: jekotia/discord-irc
@@ -67,8 +71,6 @@ services:
     restart: unless-stopped
     volumes:
     - "/saturn/data/discord-irc:/data"
-#    networks:
-#    - "local"
 
 #  gogs:
 #    image: gogs/gogs-rpi
@@ -81,6 +83,8 @@ services:
 #    - "3000:3000"
 #    networks:
 #    - "proxy"
+#    - "mail"
+#    - "database"
 #    - "local"
 #    depends_on:
 #    - "mysql"
@@ -171,8 +175,24 @@ services:
     stdin_open: true
     tty: true
 
+  mailer:
+    image: jekotia/smtp-relay
+    container_name: "mailer"
+    restart: "unless-stopped"
+    ports:
+    - "25:25"
+    networks:
+    - "mail"
+    environment:
+    - GMAIL_USER=${EMAIL_FROM}
+    - GMAIL_PASSWORD=${EMAIL_FROM_PASSWORD}
+
 networks:
   proxy:
+    driver: bridge
+  mail:
+    driver: bridge
+  database:
     driver: bridge
   local:
     driver: bridge
