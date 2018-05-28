@@ -1,17 +1,43 @@
 version: '3'
 
 services:
-  portainer:
-    image: portainer/portainer
-    container_name: "portainer"
+  nginx-proxy:
+    image: jekotia/nginx-proxy
+    container_name: "proxy"
     restart: unless-stopped
+#    depends_on:
+#    - "portainer"
+#    - "alerthub"
+#    - "hass"
+#    - "pihole"
+#    - "weechat"
+    environment:
+    - API_KEY=${AMPLIFY_API_KEY}
+    - AMPLIFY_IMAGENAME=${AMPLIFY_IMAGENAME}
     volumes:
-    - "/saturn/data/portainer:/data"
-    - "/var/run/docker.sock:/var/run/docker.sock"
-#    ports:
-#    - "9000:80"
+    - /saturn/data/proxy:/etc/nginx:ro
+#    - /saturn/data/nginx/www:/var/www:ro
+#    - /saturn/data/nginx/logs:/var/log/nginx
+    - /saturn/data/ssl:/cert:ro
+    ports:
+    - 80:80
+    - 443:443
     networks:
-    - "proxy"
+    - proxy
+
+#  portainer:
+#    image: portainer/portainer:linux-arm-1.16.5
+#    container_name: "portainer"
+#    restart: unless-stopped
+#    command: -H unix:///var/run/docker.sock
+#    privileged: true
+#    volumes:
+#    - "/saturn/data/portainer:/data"
+#    - "/var/run/docker.sock:/var/run/docker.sock"
+##    ports:
+##    - "9000:9000"
+#    networks:
+#    - "proxy"
 
   watchtower:
     image: v2tec/watchtower:armhf-0.3
@@ -43,6 +69,7 @@ services:
 #    container_name: "mysql"
 #    restart: "unless-stopped"
 #    networks:
+#    - "database"
 #    - "local"
 #    volumes:
 #    - "/docker/data/mysql:/var/lib/mysql"
@@ -58,8 +85,11 @@ services:
     restart: unless-stopped
     volumes:
     - "/saturn/data/alerthub/config.js:/data/config.js:ro"
-#    networks:
-#    - "out"
+#    ports:
+#    - "3444:3444"
+    networks:
+    - "proxy"
+    - "mail"
 
   discord-irc:
     image: jekotia/discord-irc
@@ -67,8 +97,6 @@ services:
     restart: unless-stopped
     volumes:
     - "/saturn/data/discord-irc:/data"
-#    networks:
-#    - "local"
 
 #  gogs:
 #    image: gogs/gogs-rpi
@@ -81,6 +109,8 @@ services:
 #    - "3000:3000"
 #    networks:
 #    - "proxy"
+#    - "mail"
+#    - "database"
 #    - "local"
 #    depends_on:
 #    - "mysql"
@@ -92,27 +122,6 @@ services:
     volumes:
     - /saturn/data/hass:/config
     - /etc/localtime:/etc/localtime:ro
-#    - /saturn/data/hass:/data
-#    ports:
-#    - 3580:80
-    networks:
-    - proxy
-
-  nginx-proxy:
-    image: jekotia/nginx-proxy
-    container_name: "proxy"
-    restart: unless-stopped
-    environment:
-    - API_KEY=${AMPLIFY_API_KEY}
-    - AMPLIFY_IMAGENAME=${AMPLIFY_IMAGENAME}
-    volumes:
-    - /saturn/data/proxy:/etc/nginx:ro
-#    - /saturn/data/nginx/www:/var/www:ro
-#    - /saturn/data/nginx/logs:/var/log/nginx
-    - /saturn/data/ssl:/cert:ro
-    ports:
-    - 80:80
-    - 443:443
     networks:
     - proxy
 
@@ -123,9 +132,9 @@ services:
     volumes:
     - "/saturn/data/pihole/etc:/etc/pihole"
     - "/saturn/data/pihole/dnsmasq.d:/etc/dnsmasq.d"
-    ports:
-    - "5080:80"
-    - "53:53"
+#    ports:
+#    - "5080:80"
+#    - "53:53"
     networks:
     - proxy
     environment:
@@ -163,16 +172,29 @@ services:
     restart: unless-stopped
     volumes:
     - "/saturn/data/weechat:/data"
-    ports:
-#    - "9001:9001"
-    - "8443:8443"
-#    networks:
-#    - proxy
+    networks:
+    - proxy
     stdin_open: true
     tty: true
 
+  mailer:
+    image: jekotia/smtp-relay
+    container_name: "mailer"
+    restart: "unless-stopped"
+#    ports:
+#    - "25:25"
+    networks:
+    - "mail"
+    environment:
+    - GMAIL_USER=${EMAIL_FROM}
+    - GMAIL_PASSWORD=${EMAIL_FROM_PASSWORD}
+
 networks:
   proxy:
+    driver: bridge
+  mail:
+    driver: bridge
+  database:
     driver: bridge
   local:
     driver: bridge
