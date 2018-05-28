@@ -1,10 +1,24 @@
+## su-exec build start
 FROM	resin/raspberrypi3-debian
+
+RUN	[ "cross-build-start" ]
+
+RUN	apt-get update \
+	&& apt-get install -y git make gcc libc6-dev \
+	&& git clone https://github.com/ncopa/su-exec.git /su-exec \
+	&& cd /su-exec \
+	&& make
+
+## Base Image start
+FROM	resin/raspberrypi3-debian
+COPY	--from=0 /su-exec/su-exec /sbin/
 COPY	copy/apt-cleanup /usr/bin
 
-#
-##
-###
 RUN	[ "cross-build-start" ]
+###
+##
+#
+
 
 RUN	apt-get update \
 	&& apt-get upgrade -y \
@@ -14,7 +28,7 @@ RUN	apt-get update \
 	&& chmod +x /usr/bin/apt-cleanup \
 	&& apt-cleanup
 
-RUN	[ "cross-build-end" ]
-###
-##
 #
+##
+###
+RUN	[ "cross-build-end" ]
