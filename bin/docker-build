@@ -1,29 +1,31 @@
 #! /bin/bash
-VER_NUM="1.0"
-VER_DATE="May 10th, 2018"
+VER_NUM="1.1"
+VER_DATE="May 29th, 2018"
 
 imagePrefix="jekotia"
 
 function _usage () {
 	echo "This is a simple script for consistently building Docker images with the command:"
-	echo "	docker build -t TAG DIRECTORY"
-	echo "	docker build -t TAG DIRECTORY test"
+	echo "	docker-build DIRECTORY"
+	echo "	docker-build DIRECTORY test"
 	echo "Authored by Josh 'Jekotia' Ameli, v${VER_NUM} ${VER_DATE}"
 	echo
-	echo "First argument MUST be a path to a directory".
+	echo "First argument MUST be a path to a Dockerfile".
 	echo "Any subsequent arguments are appended to the \`docker build\` command."
-	echo "e.g. \`docker-build ../php\` would run the native Docker command \`docker build -t ${imagePrefix}/php ../php\`"
+	echo "Examples, format of 'input \`docker-build\` command' => 'output \`docker build\` command':"
+	echo "\`docker-build ../debian/Dockerfile\`         => \`docker build -t ${imagePrefix}/debian -f Dockerfile ../debian\`"
+	echo "\`docker-build ../debian/Dockerfile.stretch\` => \`docker build -t ${imagePrefix}/debian:stretch -f Dockerfile.stretch ../debian\`"
 }
 
 function _build () {
 	echo
-	echo "Building '${imageTag}' from '$DIR'"
-	if docker build -t $imageTag $DIR $@ ; then
+	echo "Building '${imageLabel}' from '$DIR'"
+	if docker build -t $imageLabel -f `basename $target` $DIR $@ ; then
 		buildStatus="$?"
 		echo
-		echo "Finished building '${imageTag}' from '$DIR'"
+		echo "Finished building '${imageLabel}' from '$DIR'"
 		if [[ "$test" == "true" ]] ; then
-			docker push $imageTag
+			docker push $imageLabel
 			buildStatus="$?"
 		fi
 	else
@@ -41,27 +43,38 @@ if [[ "$1" == "" ]] ; then
 elif [[ "$1" == "--help" || "$1" == "-h" ]] ; then
 	_usage
 
-elif	cd "$1" > /dev/null 2>&1 ; then # See if we can change to the target Dockerfile directory
+elif	cd `dirname $1` > /dev/null 2>&1 ; then # See if we can change to the target Dockerfile directory
+	target="$1"
 	shift
 
-	# Save the full path of our new location to a variable. We'll need to manipulate this string a little
+	# Save the full path of our new location to a variable. We'll need to manipulate this string a little.
 	# This allows us to maintain full functionality even when someone runs `docker-build .`
 	DIR="`pwd`"
 	# Derive the image name from the directory the Dockerfile resides within
 	imageName="`basename $DIR`"
-	# Prepend the image name with '${imagePrefix}/' to get the tag
+	# Prepend the image name with '${imagePrefix}/' to get the label
 	if [[ "$1" == "test" ]] ; then
-		imageTag="${imagePrefix}/test:${imageName}"
+		imageLabel="${imagePrefix}/test:${imageName}"
 		shift
 		test="true"
 	else
-		imageTag="${imagePrefix}/${imageName}"
+		imageLabel="${imagePrefix}/${imageName}"
 		test="false"
+
+		# Determine the tag to use in the image label
+		tag="`basename $target`"
+		tag=$(echo $tag | cut -d '.' -f2)
+		if [[ "$tag" == "`basename $target`" ]] ; then
+			imageLabel="${imageLabel}:latest"
+		else
+			imageLabel="${imageLabel}:${tag}"
+		fi
 	fi
+
 	echo "===================== Build parameters ====================="
 	echo "| DIR       =  $DIR"
 	echo "| imageName =  $imageName"
-	echo "| imageTag  =  $imageTag"
+	echo "| imageLabel  =  $imageLabel"
 	echo "============================================================"
 
 	_build $@
