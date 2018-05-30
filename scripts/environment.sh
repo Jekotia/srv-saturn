@@ -25,6 +25,7 @@ _script_init="${_script_root}/init" # Script init file for one-line integration 
 _script_func="${_script_root}/functions" # Script functions directory
 _script_ddns="${_script_root}/ddns.sh"
 
+_ssl_data="${_data}/ssl"
 
 _puppet_root="${_root}/puppet" # root for puppet files
 
@@ -34,7 +35,7 @@ _alerthub_group="${_alerthub_user}"
 _alerthub_uid="2041"
 _alerthub_gid="${_alerthub_uid}"
 
-_dehydrated_data="${_data}/ssl"
+_dehydrated_data="${_ssl_data}"
 _dehydrated_user="dehydrated"
 _dehydrated_group="${_dehydrated_user}"
 _dehydrated_uid="2113"
@@ -125,6 +126,8 @@ _envAdd	"_SCRIPT_ROOT"		"${_script_root}"
 _envAdd	"_SCRIPT_INIT"		"${_script_init}"
 _envAdd	"_SCRIPT_FUNC"		"${_script_func}"
 _envAdd "_SCRIPT_DDNS"		"${_script_ddns}"
+
+_envAdd "_SSL_DATA"		"${_ssl_data}"
 
 _envAdd "_PUPPET_ROOT"		"${_puppet_root}"
 
