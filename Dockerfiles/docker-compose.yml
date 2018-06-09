@@ -3,22 +3,22 @@ version: '3'
 services:
   nginx-proxy:
     image: jekotia/nginx-proxy
-    container_name: "proxy"
+    container_name: proxy
     restart: unless-stopped
 #    depends_on:
-#    - "portainer"
-#    - "alerthub"
-#    - "hass"
-#    - "pihole"
-#    - "weechat"
+#    - portainer
+#    - alerthub
+#    - hass
+#    - pihole
+#    - weechat
     environment:
     - API_KEY=${AMPLIFY_API_KEY}
     - AMPLIFY_IMAGENAME=${AMPLIFY_IMAGENAME}
     volumes:
-    - /saturn/data/proxy:/etc/nginx:ro
+    - $_PROXY_DATA:/etc/nginx:ro
 #    - /saturn/data/nginx/www:/var/www:ro
 #    - /saturn/data/nginx/logs:/var/log/nginx
-    - /saturn/data/ssl:/cert:ro
+    - $_SSL_DATA:/cert:ro
     ports:
     - 80:80
     - 443:443
@@ -27,27 +27,27 @@ services:
 
 #  portainer:
 #    image: portainer/portainer:linux-arm-1.16.5
-#    container_name: "portainer"
+#    container_name: portainer
 #    restart: unless-stopped
 #    command: -H unix:///var/run/docker.sock
 #    privileged: true
 #    volumes:
-#    - "/saturn/data/portainer:/data"
-#    - "/var/run/docker.sock:/var/run/docker.sock"
+#    - $_PORTAINER_DATA:/data
+#    - /var/run/docker.sock:/var/run/docker.sock
 ##    ports:
-##    - "9000:9000"
+##    - 9000:9000
 #    networks:
-#    - "proxy"
+#    - proxy
 
   watchtower:
     image: v2tec/watchtower:armhf-0.3
-    container_name: "watchtower"
+    container_name: watchtower
     restart: unless-stopped
     command: --cleanup
 #    networks:
-#    - "local"
+#    - local
     volumes:
-    - "/var/run/docker.sock:/var/run/docker.sock"
+    - /var/run/docker.sock:/var/run/docker.sock
     environment:
 #The e-mail address from which notifications will be sent.
     - WATCHTOWER_NOTIFICATION_EMAIL_FROM=${EMAIL_FROM}
@@ -66,13 +66,13 @@ services:
 
 #  mysql:
 #    image: hypriot/rpi-mysql
-#    container_name: "mysql"
-#    restart: "unless-stopped"
+#    container_name: mysql
+#    restart: unless-stopped
 #    networks:
-#    - "database"
-#    - "local"
+#    - database
+#    - local
 #    volumes:
-#    - "/docker/data/mysql:/var/lib/mysql"
+#    - $_MYSQL_DATA:/var/lib/mysql
 #    environment:
 #    - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
 #    - MYSQL_ROOT_PASSWORD=${DB_USER}
@@ -81,60 +81,60 @@ services:
 
   alerthub:
     image: jekotia/alerthub
-    container_name: "alerthub"
+    container_name: alerthub
     restart: unless-stopped
     volumes:
-    - "/saturn/data/alerthub/config.js:/data/config.js:ro"
+    - $_ALERTHUB_DATA/config.js:/data/config.js:ro
 #    ports:
-#    - "3444:3444"
+#    - 3444:3444
     networks:
-    - "proxy"
-    - "mail"
+    - proxy
+    - mail
 
   discord-irc:
     image: jekotia/discord-irc
-    container_name: "discord-irc"
+    container_name: discord-irc
     restart: unless-stopped
     volumes:
-    - "/saturn/data/discord-irc:/data"
+    - $_DISCORDIRC_DATA:/data
 
 #  gogs:
 #    image: gogs/gogs-rpi
-#    container_name: "gogs"
+#    container_name: gogs
 #    restart: unless-stopped
 #    volumes:
-#    - /saturn/data/gogs:/data
+#    - $_GOGS_DATA:/data
 #    ports:
-#    - "10022:22"
-#    - "3000:3000"
+#    - 10022:22
+#    - 3000:3000
 #    networks:
-#    - "proxy"
-#    - "mail"
-#    - "database"
-#    - "local"
+#    - proxy
+#    - mail
+#    - database
+#    - local
 #    depends_on:
-#    - "mysql"
+#    - mysql
 
   hass:
     image: homeassistant/raspberrypi3-homeassistant:0.68.1
-    container_name: "hass"
+    container_name: hass
     restart: unless-stopped
     volumes:
-    - /saturn/data/hass:/config
+    - $_HASS_DATA:/config
     - /etc/localtime:/etc/localtime:ro
     networks:
     - proxy
 
   pihole:
     image: diginc/pi-hole-multiarch:debian_armhf
-    container_name: "pihole"
+    container_name: pihole
     restart: unless-stopped
     volumes:
-    - "/saturn/data/pihole/etc:/etc/pihole"
-    - "/saturn/data/pihole/dnsmasq.d:/etc/dnsmasq.d"
+    - $_PIHOLE_DATA/etc:/etc/pihole
+    - $_PIHOLE_DATA/dnsmasq.d:/etc/dnsmasq.d
 #    ports:
-#    - "5080:80"
-#    - "53:53"
+#    - 5080:80
+#    - 53:53
     networks:
     - proxy
     environment:
@@ -168,10 +168,10 @@ services:
 
   weechat:
     image: jekotia/weechat
-    container_name: "weechat"
+    container_name: weechat
     restart: unless-stopped
     volumes:
-    - "/saturn/data/weechat:/data"
+    - $_WEECHAT_DATA:/data
     networks:
     - proxy
     stdin_open: true
@@ -179,12 +179,12 @@ services:
 
   mailer:
     image: jekotia/smtp-relay
-    container_name: "mailer"
-    restart: "unless-stopped"
+    container_name: mailer
+    restart: unless-stopped
 #    ports:
-#    - "25:25"
+#    - 25:25
     networks:
-    - "mail"
+    - mail
     environment:
     - GMAIL_USER=${EMAIL_FROM}
     - GMAIL_PASSWORD=${EMAIL_FROM_PASSWORD}
