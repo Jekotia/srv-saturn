@@ -7,3 +7,4 @@ queue/
 logs/
 puppet/envList
 puppet/puppetfile.pp
+snapshots/
