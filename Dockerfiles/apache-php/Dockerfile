@@ -29,6 +29,4 @@ RUN	[ "cross-build-end" ]
 
 EXPOSE	80
 
-VOLUME	[ "${APP}","${DATA}" ]
-
 CMD	[ "apachectl","-D","FOREGROUND" ]
