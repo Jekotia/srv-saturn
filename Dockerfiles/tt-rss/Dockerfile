@@ -19,4 +19,4 @@ RUN	wget ${APP_DL} -O ${APP}/tt-rss_${APP_VER}.tar.gz \
 ###
 RUN	[ "cross-build-end" ]
 
-VOLUME [ "${APP}","${DATA}" ]
+VOLUME [ "${DATA}" ]
