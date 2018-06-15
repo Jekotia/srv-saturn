@@ -8,15 +8,15 @@ RUN	[ "cross-build-start" ]
 ##
 #
 
-RUN	wget ${APP_DL} -O tt-rss_${APP_VER}.tar.gz
-RUN	tar -xf tt-rss_${APP_VER}.tar.gz
-RUN	rm -rf ${APP}
-RUN	mv tt-rss ${APP}
-RUN	rm -rf tt-rss_${APP_VER}.tar.gz
-
 WORKDIR	$APP
+
+RUN	wget ${APP_DL} -O ${APP}/tt-rss_${APP_VER}.tar.gz \
+	&& tar -xvf ${APP}/tt-rss_${APP_VER}.tar.gz --strip 1 \
+	&& rm -rf tt-rss_${APP_VER}.tar.gz
 
 #
 ##
 ###
 RUN	[ "cross-build-end" ]
+
+VOLUME [ "${DATA}" ]
