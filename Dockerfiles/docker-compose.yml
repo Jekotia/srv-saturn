@@ -64,20 +64,19 @@ services:
 # The password to authenticate with the SMTP server with.
     - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD=${EMAIL_FROM_PASSWORD}
 
-#  mysql:
-#    image: hypriot/rpi-mysql
-#    container_name: mysql
-#    restart: unless-stopped
-#    networks:
-#    - database
-#    - local
-#    volumes:
-#    - $_MYSQL_DATA:/var/lib/mysql
-#    environment:
-#    - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-#    - MYSQL_ROOT_PASSWORD=${DB_USER}
-#    - MYSQL_USER_PASSWORD=${DB_PASSWORD}
-#    - MYSQL_USER_PASSWORD=${DB_DATABASE}
+  mysql:
+    image: hypriot/rpi-mysql
+    container_name: mysql
+    restart: unless-stopped
+    networks:
+    - database
+    volumes:
+    - $_MYSQL_DATA:/var/lib/mysql
+    environment:
+    - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    - MYSQL_USER=${DB_USER}
+    - MYSQL_PASSWORD=${DB_PASSWORD}
+    - MYSQL_DATABASE=${DB_DATABASE}
 
   alerthub:
     image: jekotia/alerthub
