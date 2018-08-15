@@ -29,6 +29,8 @@ _ssl_data="${_data}/ssl"
 
 _puppet_root="${_root}/puppet" # root for puppet files
 
+_relm="${_root}/relm"
+
 _alerthub_data="${_data}/alerthub"
 _alerthub_user="alerthub"
 _alerthub_group="${_alerthub_user}"
@@ -120,6 +122,8 @@ _envAdd	"_SCRIPT_ROOT"		"${_script_root}"
 _envAdd	"_SCRIPT_INIT"		"${_script_init}"
 _envAdd	"_SCRIPT_FUNC"		"${_script_func}"
 _envAdd "_SCRIPT_DDNS"		"${_script_ddns}"
+
+_envAdd "_RELM"			"${_relm}"
 
 _envAdd "_SSL_DATA"		"${_ssl_data}"
 

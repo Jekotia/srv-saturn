@@ -4,6 +4,18 @@ host { "system":
 	ip		=> "$_IP",
 }
 
+cron { "relm":
+	ensure		=> "present",
+	command		=> "cd $_RELM && python3 $_RELM/relm.py github --user=jekotia > /dev/null 2>&1",
+	user		=> "pi",
+	minute		=> "*/30",
+	hour		=> "absent",
+	monthday	=> "absent",
+	month		=> "absent",
+	weekday		=> "absent",
+	special		=> "absent",
+}
+
 cron { "ddns-update":
 	ensure		=> "present",
 	command		=> "$_SCRIPT_DDNS > /dev/null 2>&1",
