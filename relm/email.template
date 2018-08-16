@@ -1,6 +1,6 @@
 From: $sender
 To: $to
-Subject: RELMON $name has been updated
+Subject: relm: $name has been updated
 Mime-Version: 1.0
 Content-Type: text/html
 
