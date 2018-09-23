@@ -9,7 +9,6 @@ services:
 #    - portainer
 #    - alerthub
 #    - hass
-#    - pihole
 #    - weechat
     environment:
     - API_KEY=${AMPLIFY_API_KEY}
@@ -64,20 +63,19 @@ services:
 # The password to authenticate with the SMTP server with.
     - WATCHTOWER_NOTIFICATION_EMAIL_SERVER_PASSWORD=${EMAIL_FROM_PASSWORD}
 
-#  mysql:
-#    image: hypriot/rpi-mysql
-#    container_name: mysql
-#    restart: unless-stopped
-#    networks:
-#    - database
-#    - local
-#    volumes:
-#    - $_MYSQL_DATA:/var/lib/mysql
-#    environment:
-#    - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-#    - MYSQL_ROOT_PASSWORD=${DB_USER}
-#    - MYSQL_USER_PASSWORD=${DB_PASSWORD}
-#    - MYSQL_USER_PASSWORD=${DB_DATABASE}
+  mysql:
+    image: hypriot/rpi-mysql
+    container_name: mysql
+    restart: unless-stopped
+    networks:
+    - database
+    volumes:
+    - $_MYSQL_DATA:/var/lib/mysql
+    environment:
+    - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    - MYSQL_USER=${DB_USER}
+    - MYSQL_PASSWORD=${DB_PASSWORD}
+    - MYSQL_DATABASE=${DB_DATABASE}
 
   alerthub:
     image: jekotia/alerthub
@@ -124,47 +122,6 @@ services:
     - /etc/localtime:/etc/localtime:ro
     networks:
     - proxy
-
-  pihole:
-    image: diginc/pi-hole-multiarch:debian_armhf
-    container_name: pihole
-    restart: unless-stopped
-    volumes:
-    - $_PIHOLE_DATA/etc:/etc/pihole
-    - $_PIHOLE_DATA/dnsmasq.d:/etc/dnsmasq.d
-#    ports:
-#    - 5080:80
-#    - 53:53
-    networks:
-    - proxy
-    environment:
-# Set to your server's external IP to block ads fully
-    - ServerIP=192.168.0.5
-# If you have a v6 network set to your server's external IPv6 to block IPv6 ads fully
-    - ServerIPv6=
-# Set your timezone to make sure logs rotate at local midnight instead of at UTC midnight.
-# See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-    - TZ=CA
-# http://pi.hole/admin password. Run `docker logs pihole | grep random` to find your random pass.
-    - WEBPASSWORD=${PIHOLE_WEB_PASSWORD}
-# Primary upstream DNS provider, default is google DNS
-    - DNS1=8.8.8.8
-# Secondary upstream DNS provider, default is google DNS
-    - DNS2=8.8.4.4
-# What your web server 'virtual host' is, accessing admin through this Hostname/IP allows you to make
-# changes to the whitelist / blacklists in addition to the default 'http://pi.hole/admin/' address
-    - VIRTUAL_HOST=
-# For unraid compatibility, strips out all the IPv6 configuration from DNS/Web services when false
-    - IPv6=False
-# The default works fine with our basic example docker run commands.
-# If you're trying to use DHCP with --net host mode then you may have to customize this or DNSMASQ_LISTENING.
-    - INTERFACE=
-# local listens on all local subnets
-# all permits listening on internet origin subnets in addition to local.
-    - DNSMASQ_LISTENING=
-# This will break the 'webpage blocked' functionality of pi-hole however it may help advanced setups
-# like those running synology or --net=host docker argument.
-    - WEB_PORT=
 
   weechat:
     image: jekotia/weechat

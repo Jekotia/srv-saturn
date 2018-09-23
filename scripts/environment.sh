@@ -29,11 +29,19 @@ _ssl_data="${_data}/ssl"
 
 _puppet_root="${_root}/puppet" # root for puppet files
 
+_relm="${_root}/relm"
+
 _alerthub_data="${_data}/alerthub"
 _alerthub_user="alerthub"
 _alerthub_group="${_alerthub_user}"
 _alerthub_uid="2041"
 _alerthub_gid="${_alerthub_uid}"
+
+_commafeed_data="${_data}/commafeed"
+_commafeed_user="commafeed"
+_commafeed_group="${_commafeed_user}"
+_commafeed_uid="2155"
+_commafeed_gid="${_commafeed_uid}"
 
 _dehydrated_data="${_ssl_data}"
 _dehydrated_user="dehydrated"
@@ -70,18 +78,6 @@ _nginx_user="nginx"
 _nginx_group="${_nginx_user}"
 _nginx_uid="523"
 _nginx_gid="${_nginx_uid}"
-
-_pihole_data="${_data}/pihole"
-_pihole_user="pihole"
-_pihole_group="${_pihole_user}"
-_pihole_uid="2633"
-_pihole_gid="${_pihole_uid}"
-
-_pivpn_data="${_data}/pivpn"
-_pivpn_user="pivpn"
-_pivpn_group="${_pivpn_user}"
-_pivpn_uid="2638"
-_pivpn_gid="${_pivpn_uid}"
 
 _portainer_data="${_data}/portainer"
 _portainer_user="portainer"
@@ -127,6 +123,8 @@ _envAdd	"_SCRIPT_INIT"		"${_script_init}"
 _envAdd	"_SCRIPT_FUNC"		"${_script_func}"
 _envAdd "_SCRIPT_DDNS"		"${_script_ddns}"
 
+_envAdd "_RELM"			"${_relm}"
+
 _envAdd "_SSL_DATA"		"${_ssl_data}"
 
 _envAdd "_PUPPET_ROOT"		"${_puppet_root}"
@@ -136,6 +134,12 @@ _envAdd "_ALERTHUB_USER"	"${_alerthub_user}"
 _envAdd "_ALERTHUB_GROUP"	"${_alerthub_group}"
 _envAdd "_ALERTHUB_UID"		"${_alerthub_uid}"
 _envAdd "_ALERTHUB_GID"		"${_alerthub_gid}"
+
+_envAdd "_COMMAFEED_DATA"	"${_commafeed_data}"
+_envAdd "_COMMAFEED_USER"	"${_commafeed_user}"
+_envAdd "_COMMAFEED_GROUP"	"${_commafeed_group}"
+_envAdd "_COMMAFEED_UID"	"${_commafeed_uid}"
+_envAdd "_COMMAFEED_GID"	"${_commafeed_gid}"
 
 _envAdd "_DEHYDRATED_DATA"	"${_dehydrated_data}"
 _envAdd "_DEHYDRATED_USER"	"${_dehydrated_user}"
@@ -172,18 +176,6 @@ _envAdd "_NGINX_USER"		"${_nginx_user}"
 _envAdd "_NGINX_GROUP"		"${_nginx_group}"
 _envAdd "_NGINX_UID"		"${_nginx_uid}"
 _envAdd "_NGINX_GID"		"${_nginx_gid}"
-
-_envAdd "_PIHOLE_DATA"		"${_pihole_data}"
-_envAdd "_PIHOLE_USER"		"${_pihole_user}"
-_envAdd "_PIHOLE_GROUP"		"${_pihole_group}"
-_envAdd "_PIHOLE_UID"		"${_pihole_uid}"
-_envAdd "_PIHOLE_GID"		"${_pihole_gid}"
-
-_envAdd "_PIVPN_DATA"		"${_pivpn_data}"
-_envAdd "_PIVPN_USER"		"${_pivpn_user}"
-_envAdd "_PIVPN_GROUP"		"${_pivpn_group}"
-_envAdd "_PIVPN_UID"		"${_pivpn_uid}"
-_envAdd "_PIVPN_GID"		"${_pivpn_gid}"
 
 _envAdd "_PORTAINER_DATA"	"${_portainer_data}"
 _envAdd "_PORTAINER_USER"	"${_portainer_user}"
