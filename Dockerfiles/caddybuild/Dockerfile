@@ -1,49 +1,40 @@
 FROM	resin/raspberrypi3-golang as build
-#RUN	["cross-build-start"]
 
-RUN	go get github.com/mholt/caddy/caddy
-RUN	go get github.com/caddyserver/builds
-RUN	go get github.com/lucaslorentz/caddy-docker-proxy/plugin
-RUN	go get github.com/caddyserver/dnsproviders/cloudflare
+## Get the necessary go sources to get started
+RUN	go get github.com/mholt/caddy/caddy \
+	&& go get github.com/caddyserver/builds \
+	&& go get github.com/lucaslorentz/caddy-docker-proxy/plugin \
+	&& go get github.com/caddyserver/dnsproviders/cloudflare
+
 WORKDIR	$GOPATH/src/github.com/mholt/caddy/caddy
+## Bring in the plugins list
 COPY	copy/plugins plugins
+## Insert the plugins list into caddy's source
 RUN	sed -i -e "/\/\/\sThis\sis\swhere\sother\splugins\sget\splugged\sin\s.imported./ r plugins" caddymain/run.go
-RUN	grep -f plugins caddymain/run.go
-#RUN	sed -i -e 's/\/\/\sThis\sis\swhere\sother\splugins\sget\splugged\sin\s.imported./`cat plugins`/' caddymain/run.go
-#RUN	mv run.go original.run.go
-#RUN	sed '/\s*\/\/\sThis\sis\swhere\sother\splugins\sget\splugged\sin\s\(imported\)/a $(</plugins)' caddymain/run.go
-#RUN	sed "s/\s*\/\/\sThis\sis\swhere\sother\splugins\sget\splugged\sin\s\(imported\)/ $(</plugins)/" caddymain/run.go
-#RUN	sed "\s./\/\/\ This\ is\ where\ other\ plugins\ get\ plugged\ in\ \(imported\)/ $(</plugins)/" caddymain/run.go
-#RUN	sed '|\/\/\ This\ is\ where\ other\ plugins\ get\ plugged\ in\ (imported)|i ' \
-#	&& head -n 23 run.go > newrun.go \
-#	&& cat /plugins >> newrun.go \
-#	&& tail -n +24 run.go >> newrun.go \
-#	&& rm -f run.go \
-#	&& mv newrun.go run.go
-#RUN	pwd
-#RUN head -45 caddymain/run.go
-#RUN return 1
+## Ensure the insertion worked
+RUN	grep -f ./plugins caddymain/run.go
 
+## Compile
 RUN	go run build.go
-RUN return 1
-
-
-#RUN	["cross-build-end"]
-
+## Ensure plugins are available
+RUN	./caddy -plugins | grep "tls.dns.cloudflare"
+RUN	./caddy -plugins | grep "docker"
+## Ensure ca-certificates are present, to be copied later
+RUN	apt-get install ca-certificates
+## Make the /caddy dir to be copied in next stage
+RUN	mkdir /caddy
 
 FROM	scratch
 ENV	CADDYPATH=/caddy
 
 COPY	--from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY	--from=build /go /bin/
-RUN	mkdir /caddy
+COPY	--from=build /go/src/github.com/mholt/caddy/caddy/caddy /bin/
+COPY	--from=build /caddy /
 
 WORKDIR	/caddy
 
 VOLUME	/caddy
 
-EXPOSE	80, 443
-
-#STOPSIGNAL SIGTERM
+EXPOSE	80 443
 
 ENTRYPOINT	["/bin/caddy"]
