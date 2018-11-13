@@ -34,6 +34,7 @@ function _puppet() {
 	rm -f /tmp/puppet.deb || exit 22
 	apt-get update || exit 23
 	apt-get install -y puppet || exit 24
+	puppet module install puppetlabs-stdlib || exit 25
 }
 
 function _docker () {

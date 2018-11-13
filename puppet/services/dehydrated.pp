@@ -30,3 +30,16 @@ file { "dehydrated data folder":
 	owner		=> "$_DEHYDRATED_UID",
 	recurse		=> "true",
 }
+
+package { "build-essential":	ensure  => "installed" }
+package { "python-dev":		ensure  => "installed" }
+package { "curl":		ensure  => "installed" }
+package { "libffi-dev":		ensure  => "installed" }
+package { "libssl-dev":		ensure  => "installed" }
+package { "python3":		ensure  => "installed" }
+
+ensure_packages(['requests[security]', 'dns-lexicon'], {
+	ensure   => present,
+	provider => 'pip3',
+#	require  => [ Package['python3-pip'], ],
+})
