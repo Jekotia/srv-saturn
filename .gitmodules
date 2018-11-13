@@ -1,6 +1,3 @@
-[submodule "ssl/dns-01-manual"]
-	path = ssl/dns-01-manual
-	url = https://github.com/owhen/dns-01-manual.git
 [submodule "ssl/dehydrated"]
 	path = ssl/dehydrated
 	url = https://github.com/lukas2511/dehydrated.git

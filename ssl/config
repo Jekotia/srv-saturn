@@ -78,9 +78,7 @@ ACCOUNTDIR="${_DATA}/ssl/accounts"
 #
 # BASEDIR and WELLKNOWN variables are exported and can be used in an external program
 # default: <unset>
-#HOOK=${_DATA}/../dns-01-manual/hook.sh
-HOOK=${SCRIPTDIR}/../dns-01-manual/hook.sh
-#HOOK=${_DATA}/../letsencrypt-manual-hook/manual_hook.rb
+HOOK=${SCRIPTDIR}/../lexicon-hook.sh
 
 # Chain clean_challenge|deploy_challenge arguments together into one hook call per certificate (default: no)
 #HOOK_CHAIN="no"
