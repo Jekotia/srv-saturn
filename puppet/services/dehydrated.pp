@@ -13,7 +13,7 @@ group { "$_DEHYDRATED_GROUP":
 
 cron { "dehydrated-ssl":
 	ensure		=> "present",
-	command		=> "$_ROOT/ssl/run.sh",
+	command		=> "$_ROOT/ssl/run.sh -c",
 	user		=> "root",
 	minute		=> "0",
 	hour		=> "absent",
